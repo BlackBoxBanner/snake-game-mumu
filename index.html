@@ -1,88 +1,193 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Mumu</title>
-  <link rel="icon" type="image/png" href="assets/snake-face.png" />
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <main class="game-wrap">
-    <header class="game-header">
-      <h1 class="title">
-        <img src="assets/snake-face.png" alt="" class="title-face" />
-        Mumu
-      </h1>
-      <div class="scores">
-        <div class="score-card">
-          <span class="score-label">now</span>
-          <span class="score-value" id="score">0</span>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <title>Mumu</title>
+    <link rel="icon" type="image/png" href="assets/snake-face.png" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="game-wrap">
+      <header class="game-header">
+        <h1 class="title">
+          <img src="assets/snake-face.png" alt="" class="title-face" />
+          Mumu
+        </h1>
+        <div class="scores">
+          <div class="score-card">
+            <span class="score-label">now</span>
+            <span class="score-value" id="score">0</span>
+          </div>
+          <div class="score-card">
+            <span class="score-label">best</span>
+            <span class="score-value" id="high-score">0</span>
+          </div>
         </div>
-        <div class="score-card">
-          <span class="score-label">best</span>
-          <span class="score-value" id="high-score">0</span>
+      </header>
+
+      <div class="board-wrap">
+        <canvas id="board" width="480" height="480"></canvas>
+
+        <div class="overlay visible" id="overlay">
+          <div class="overlay-content" id="overlay-content">
+            <img src="assets/snake-face.png" alt="" class="overlay-face" />
+            <h2 id="overlay-title">Hungry?</h2>
+            <p id="overlay-text">
+              Arrows, WASD, or a swipe. Don't bite yourself.
+            </p>
+            <button id="play-btn" class="play-btn">Go</button>
+          </div>
         </div>
       </div>
-    </header>
 
-    <div class="board-wrap">
-      <canvas id="board" width="480" height="480"></canvas>
+      <div class="dpad" id="dpad" aria-label="Direction controls">
+        <button class="dpad-btn dpad-up" data-dir="up" aria-label="Move up">
+          <svg class="dpad-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 6 20 18H4Z" />
+          </svg>
+        </button>
+        <button
+          class="dpad-btn dpad-left"
+          data-dir="left"
+          aria-label="Move left"
+        >
+          <svg class="dpad-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 6 20 18H4Z" />
+          </svg>
+        </button>
+        <button class="dpad-btn dpad-pause" id="pause-btn" aria-label="Pause">
+          <svg
+            class="dpad-icon icon-pause"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <rect x="6" y="5" width="4.5" height="14" rx="1.2" />
+            <rect x="13.5" y="5" width="4.5" height="14" rx="1.2" />
+          </svg>
+          <svg
+            class="dpad-icon icon-play"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path d="M8.2 5.6v12.8L19.2 12 8.2 5.6Z" />
+          </svg>
+        </button>
+        <button
+          class="dpad-btn dpad-right"
+          data-dir="right"
+          aria-label="Move right"
+        >
+          <svg class="dpad-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 6 20 18H4Z" />
+          </svg>
+        </button>
+        <button
+          class="dpad-btn dpad-down"
+          data-dir="down"
+          aria-label="Move down"
+        >
+          <svg class="dpad-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 6 20 18H4Z" />
+          </svg>
+        </button>
+      </div>
 
-      <div class="overlay visible" id="overlay">
-        <div class="overlay-content" id="overlay-content">
-          <img src="assets/snake-face.png" alt="" class="overlay-face" />
-          <h2 id="overlay-title">Hungry?</h2>
-          <p id="overlay-text">Arrows, WASD, or a swipe. Don't bite yourself.</p>
-          <button id="play-btn" class="play-btn">Go</button>
+      <button
+        id="auto-play-btn"
+        class="auto-play-btn"
+        type="button"
+        aria-pressed="false"
+      >
+        Auto
+      </button>
+
+      <p class="hint">arrows / wasd to slither &middot; space to pause</p>
+
+      <button
+        id="source-btn"
+        class="source-btn"
+        type="button"
+        aria-haspopup="dialog"
+      >
+        &lt;/&gt; source
+      </button>
+    </main>
+
+    <div class="source-modal" id="source-modal" hidden>
+      <div class="source-backdrop" id="source-backdrop"></div>
+      <div
+        class="source-panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="source-title"
+      >
+        <header class="source-header">
+          <h2 id="source-title" class="source-title">Source</h2>
+          <div class="source-actions">
+            <button
+              id="source-copy-btn"
+              class="source-action-btn"
+              type="button"
+            >
+              Copy
+            </button>
+            <button
+              id="source-close-btn"
+              class="source-action-btn source-close-btn"
+              type="button"
+              aria-label="Close"
+            >
+              &times;
+            </button>
+          </div>
+        </header>
+
+        <div class="source-tabs" role="tablist" aria-label="Source files">
+          <button
+            class="source-tab is-active"
+            type="button"
+            role="tab"
+            aria-selected="true"
+            data-file="game.js"
+          >
+            game.js
+          </button>
+          <button
+            class="source-tab"
+            type="button"
+            role="tab"
+            aria-selected="false"
+            data-file="style.css"
+          >
+            style.css
+          </button>
+          <button
+            class="source-tab"
+            type="button"
+            role="tab"
+            aria-selected="false"
+            data-file="index.html"
+          >
+            index.html
+          </button>
+        </div>
+
+        <div class="source-body">
+          <pre
+            class="source-code"
+            id="source-code"
+            tabindex="0"
+          ><code></code></pre>
+          <p class="source-error" id="source-error" hidden></p>
         </div>
       </div>
     </div>
 
-    <div class="dpad" id="dpad" aria-label="Direction controls">
-      <button class="dpad-btn dpad-up" data-dir="up" aria-label="Move up">
-        <svg class="dpad-icon" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 6 20 18H4Z" />
-        </svg>
-      </button>
-      <button class="dpad-btn dpad-left" data-dir="left" aria-label="Move left">
-        <svg class="dpad-icon" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 6 20 18H4Z" />
-        </svg>
-      </button>
-      <button class="dpad-btn dpad-pause" id="pause-btn" aria-label="Pause">
-        <svg class="dpad-icon icon-pause" viewBox="0 0 24 24" aria-hidden="true">
-          <rect x="6" y="5" width="4.5" height="14" rx="1.2" />
-          <rect x="13.5" y="5" width="4.5" height="14" rx="1.2" />
-        </svg>
-        <svg class="dpad-icon icon-play" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M8.2 5.6v12.8L19.2 12 8.2 5.6Z" />
-        </svg>
-      </button>
-      <button class="dpad-btn dpad-right" data-dir="right" aria-label="Move right">
-        <svg class="dpad-icon" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 6 20 18H4Z" />
-        </svg>
-      </button>
-      <button class="dpad-btn dpad-down" data-dir="down" aria-label="Move down">
-        <svg class="dpad-icon" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 6 20 18H4Z" />
-        </svg>
-      </button>
-    </div>
-
-    <button
-      id="auto-play-btn"
-      class="auto-play-btn"
-      type="button"
-      aria-pressed="false"
-    >
-      Auto
-    </button>
-
-    <p class="hint">arrows / wasd to slither &middot; space to pause</p>
-  </main>
-
-  <script src="game.js"></script>
-</body>
+    <script src="game.js"></script>
+    <script src="source-viewer.js"></script>
+  </body>
 </html>

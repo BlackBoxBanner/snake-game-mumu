@@ -29,10 +29,12 @@ Then visit http://localhost:8000.
 - Body gradient that fades and tapers toward the tail
 - High score saved in `localStorage`
 - Auto Play mode: a built-in AI that follows a Hamiltonian cycle with safe shortcuts, guaranteed to fill the board and win; taking over mid-game triggers a safe recovery mode until the body realigns with the cycle
+- Source viewer: `</> source` button opens a modal with tabs for `game.js`, `style.css`, and `index.html` (copy to clipboard supported)
 
 ## Files
 
 - `index.html` — page structure, score UI, start/game-over overlay
 - `style.css` — light purple theme styling
 - `game.js` — game loop, input, and rendering
+- `source-viewer.js` — in-page source code viewer
 - `assets/snake-face.png` — the snake face sprite (transparent PNG)

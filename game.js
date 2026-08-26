@@ -657,6 +657,25 @@
     overlayText.textContent = "Swipe the board or tap the arrows.";
   }
 
+  // Pause/resume hooks for the source viewer modal.
+  window.pauseForSource = () => {
+    if (state === "playing") {
+      state = "paused";
+      setPausedChrome(true);
+      overlay.classList.remove("visible");
+      return true;
+    }
+    return false;
+  };
+
+  window.resumeFromSource = () => {
+    if (state === "paused") {
+      state = "playing";
+      setPausedChrome(false);
+      lastTick = performance.now();
+    }
+  };
+
   // Initial idle render behind the start overlay.
   reset();
   state = "idle";

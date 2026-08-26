@@ -245,6 +245,218 @@ body {
   font-size: 0.78rem;
 }
 
+.source-btn {
+  align-self: center;
+  padding: 0;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--ink-soft);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.source-btn:hover {
+  color: var(--ink);
+}
+
+.source-modal[hidden] {
+  display: none;
+}
+
+.source-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: max(12px, env(safe-area-inset-top))
+    max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom))
+    max(12px, env(safe-area-inset-left));
+}
+
+.source-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(52, 48, 86, 0.45);
+}
+
+.source-panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: min(720px, 100%);
+  max-height: min(88vh, 88dvh);
+  background: var(--paper);
+  border: 2px solid var(--walnut);
+  border-radius: 14px;
+  box-shadow: 0 18px 40px rgba(52, 48, 86, 0.22);
+  overflow: hidden;
+}
+
+.source-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px 10px;
+  border-bottom: 1px solid #e4e0f5;
+}
+
+.source-title {
+  font-family: Palatino, "Palatino Linotype", "Book Antiqua", Georgia, serif;
+  font-size: 1.35rem;
+  font-style: italic;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.source-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.source-action-btn {
+  padding: 6px 12px;
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--ink);
+  background: #e8e6f9;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.source-action-btn:hover {
+  filter: brightness(1.03);
+}
+
+.source-close-btn {
+  padding: 4px 10px;
+  font-size: 1.2rem;
+  line-height: 1;
+  color: var(--ink-soft);
+  background: transparent;
+}
+
+.source-tabs {
+  display: flex;
+  gap: 6px;
+  padding: 10px 16px 0;
+  border-bottom: 1px solid #e4e0f5;
+}
+
+.source-tab {
+  padding: 8px 12px;
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+  background: transparent;
+  border: none;
+  border-radius: 8px 8px 0 0;
+  cursor: pointer;
+}
+
+.source-tab.is-active {
+  color: var(--ink);
+  background: #ece9fa;
+}
+
+.source-body {
+  flex: 1;
+  min-height: 0;
+  padding: 12px 16px 16px;
+}
+
+.source-code {
+  height: min(58vh, 58dvh);
+  margin: 0;
+  padding: 14px 16px;
+  overflow: auto;
+  font-family: "SF Mono", "Cascadia Code", "Fira Code", Consolas, monospace;
+  font-size: 0.74rem;
+  line-height: 1.6;
+  color: #e4e2f8;
+  background: #2a2744;
+  border: 1px solid #3d3860;
+  border-radius: 10px;
+  tab-size: 2;
+  -webkit-overflow-scrolling: touch;
+}
+
+.source-code code {
+  white-space: pre;
+}
+
+.source-code .tok-comment {
+  color: #8b879e;
+  font-style: italic;
+}
+
+.source-code .tok-keyword {
+  color: #a8b8f5;
+  font-weight: 600;
+}
+
+.source-code .tok-string {
+  color: #f0a8c0;
+}
+
+.source-code .tok-number {
+  color: #8fd4a0;
+}
+
+.source-code .tok-tag {
+  color: #c9a8f5;
+}
+
+.source-code .tok-attr {
+  color: #8ec8e8;
+}
+
+.source-code .tok-selector {
+  color: #e8c878;
+}
+
+.source-code .tok-property {
+  color: #8ec8e8;
+}
+
+.source-code .tok-value {
+  color: #e4e2f8;
+}
+
+.source-code .tok-function {
+  color: #f0d080;
+}
+
+.source-code .tok-builtin {
+  color: #7eb8d4;
+}
+
+.source-code .tok-operator {
+  color: #b8b4d8;
+}
+
+.source-code .tok-punct {
+  color: #9a96b8;
+}
+
+.source-error {
+  color: var(--apple);
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+
+body.source-open {
+  overflow: hidden;
+}
+
 .dpad {
   display: none;
   grid-template-areas:
@@ -380,6 +592,11 @@ body {
   }
 
   .auto-play-btn {
+    grid-column: 1 / -1;
+    justify-self: center;
+  }
+
+  .source-btn {
     grid-column: 1 / -1;
     justify-self: center;
   }
