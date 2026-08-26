@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Mumu</title>
+  <link rel="icon" type="image/png" href="assets/snake-face.png" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="game-wrap">
+    <header class="game-header">
+      <h1 class="title">
+        <img src="assets/snake-face.png" alt="" class="title-face" />
+        Mumu
+      </h1>
+      <div class="scores">
+        <div class="score-card">
+          <span class="score-label">now</span>
+          <span class="score-value" id="score">0</span>
+        </div>
+        <div class="score-card">
+          <span class="score-label">best</span>
+          <span class="score-value" id="high-score">0</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="board-wrap">
+      <canvas id="board" width="480" height="480"></canvas>
+
+      <div class="overlay visible" id="overlay">
+        <div class="overlay-content" id="overlay-content">
+          <img src="assets/snake-face.png" alt="" class="overlay-face" />
+          <h2 id="overlay-title">Hungry?</h2>
+          <p id="overlay-text">Arrows, WASD, or a swipe. Don't bite yourself.</p>
+          <button id="play-btn" class="play-btn">Go</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="dpad" id="dpad" aria-label="Direction controls">
+      <button class="dpad-btn dpad-up" data-dir="up" aria-label="Move up">&#9650;</button>
+      <button class="dpad-btn dpad-left" data-dir="left" aria-label="Move left">&#9664;</button>
+      <button class="dpad-btn dpad-pause" id="pause-btn" aria-label="Pause">&#10074;&#10074;</button>
+      <button class="dpad-btn dpad-right" data-dir="right" aria-label="Move right">&#9654;</button>
+      <button class="dpad-btn dpad-down" data-dir="down" aria-label="Move down">&#9660;</button>
+    </div>
+
+    <button
+      id="auto-play-btn"
+      class="auto-play-btn"
+      type="button"
+      aria-pressed="false"
+    >
+      Auto
+    </button>
+
+    <p class="hint">arrows / wasd to slither &middot; space to pause</p>
+  </main>
+
+  <script src="game.js"></script>
+</body>
+</html>

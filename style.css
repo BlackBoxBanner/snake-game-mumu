@@ -1,0 +1,361 @@
+:root {
+  --paper: #f2f0fb;
+  --ink: #343056;
+  --ink-soft: #7d78a6;
+  --moss: #7d96e0;
+  --leaf: #8fbc4a;
+  --apple: #c44536;
+  --amber: #b9a7ee;
+  --amber-press: #9c88d9;
+  --walnut: #8887cf;
+  --board: #d8e4f7;
+  --felt: #ded6f5;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Avenir Next", "Trebuchet MS", "Segoe UI", sans-serif;
+  color: var(--ink);
+  background-color: var(--paper);
+  background-image:
+    radial-gradient(ellipse 70% 45% at 80% 110%, #d4e4fa, transparent 55%),
+    radial-gradient(
+      circle at 1px 1px,
+      rgba(52, 48, 86, 0.06) 1px,
+      transparent 0
+    );
+  background-size:
+    auto,
+    8px 8px;
+  padding: max(12px, env(safe-area-inset-top))
+    max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom))
+    max(12px, env(safe-area-inset-left));
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.game-wrap {
+  --chrome-h: 158px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: min(520px, 100%);
+}
+
+.game-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-inline: 2px;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: Palatino, "Palatino Linotype", "Book Antiqua", Georgia, serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  font-style: italic;
+  letter-spacing: -0.03em;
+  line-height: 0.9;
+  color: var(--ink);
+}
+
+.title-face {
+  width: 44px;
+  height: 44px;
+  transform: rotate(-10deg);
+}
+
+.scores {
+  display: flex;
+  gap: 22px;
+  padding-bottom: 4px;
+}
+
+.score-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  min-width: 0;
+}
+
+.score-label {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: lowercase;
+  color: var(--ink-soft);
+}
+
+.score-value {
+  font-family: Palatino, "Palatino Linotype", "Book Antiqua", Georgia, serif;
+  font-size: 1.7rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  font-style: italic;
+  line-height: 1;
+  color: var(--ink);
+}
+
+.board-wrap {
+  position: relative;
+  width: min(
+    100%,
+    calc(100vh - var(--chrome-h)),
+    calc(100dvh - var(--chrome-h))
+  );
+  margin-inline: auto;
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--walnut);
+  border: 9px solid var(--walnut);
+  box-shadow:
+    inset 0 0 0 2px #6f6dbb,
+    0 14px 32px rgba(52, 48, 86, 0.18);
+}
+
+#board {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: var(--board);
+  border-radius: 4px;
+  touch-action: none;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(222, 224, 248, 0.75);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease;
+}
+
+.overlay.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.overlay-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+  padding: 8px 16px 4px;
+}
+
+.overlay-face {
+  width: 78px;
+  height: 78px;
+  transform: rotate(7deg);
+}
+
+.overlay h2 {
+  font-family: Palatino, "Palatino Linotype", "Book Antiqua", Georgia, serif;
+  font-size: 1.85rem;
+  font-style: italic;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.overlay p {
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+  max-width: 250px;
+  line-height: 1.4;
+}
+
+.play-btn,
+.auto-play-btn,
+.dpad-btn {
+  font-family: inherit;
+}
+
+.play-btn {
+  margin-top: 8px;
+  padding: 9px 26px 10px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--ink);
+  background: var(--amber);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 3px 0 var(--amber-press);
+}
+
+.play-btn:hover {
+  filter: brightness(1.05);
+}
+
+.play-btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 var(--amber-press);
+}
+
+.auto-play-btn {
+  align-self: center;
+  padding: 7px 20px 8px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+  background: transparent;
+  border: 1.5px solid #bfb8e2;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.auto-play-btn:hover {
+  color: var(--ink);
+  border-color: var(--ink);
+}
+
+.auto-play-btn:active {
+  transform: translateY(1px);
+}
+
+.auto-play-btn[aria-pressed="true"] {
+  color: var(--paper);
+  background: var(--moss);
+  border-color: var(--moss);
+}
+
+.hint {
+  text-align: center;
+  color: var(--ink-soft);
+  font-size: 0.78rem;
+}
+
+.dpad {
+  display: none;
+  grid-template-areas:
+    ". up ."
+    "left pause right"
+    ". down .";
+  grid-template-columns: repeat(3, clamp(52px, 16vmin, 68px));
+  grid-auto-rows: clamp(52px, 16vmin, 68px);
+  gap: 8px;
+  justify-content: center;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.dpad-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.05rem;
+  color: var(--ink);
+  background: #e8e6f9;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  touch-action: none;
+  box-shadow: 0 3px 0 #bfb8e2;
+}
+
+.dpad-btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 #bfb8e2;
+}
+
+.dpad-up {
+  grid-area: up;
+}
+.dpad-left {
+  grid-area: left;
+}
+.dpad-right {
+  grid-area: right;
+}
+.dpad-down {
+  grid-area: down;
+}
+
+.dpad-pause {
+  grid-area: pause;
+  color: var(--ink);
+  font-size: 0.85rem;
+  border-radius: 50%;
+  background: var(--amber);
+  box-shadow: 0 3px 0 var(--amber-press);
+}
+
+@media (pointer: coarse) {
+  .game-wrap {
+    --chrome-h: 348px;
+  }
+
+  .dpad {
+    display: grid;
+  }
+
+  .hint {
+    display: none;
+  }
+}
+
+@media (pointer: coarse) and (orientation: landscape) {
+  .game-wrap {
+    --chrome-h: 124px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "header header"
+      "board dpad";
+    align-items: center;
+    width: min(760px, 100%);
+  }
+
+  .game-header {
+    grid-area: header;
+  }
+
+  .board-wrap {
+    grid-area: board;
+  }
+
+  .dpad {
+    grid-area: dpad;
+    padding-inline: 8px;
+  }
+
+  .auto-play-btn {
+    grid-column: 1 / -1;
+    justify-self: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 1.7rem;
+  }
+
+  .title-face {
+    width: 36px;
+    height: 36px;
+  }
+
+  .hint {
+    display: none;
+  }
+}
