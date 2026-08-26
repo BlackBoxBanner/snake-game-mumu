@@ -7,6 +7,18 @@
       content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     />
     <title>Mumu</title>
+    <script>
+      (function () {
+        var theme = "light";
+        try {
+          var saved = localStorage.getItem("mumu-theme");
+          if (saved === "dark" || saved === "light") theme = saved;
+          else if (matchMedia("(prefers-color-scheme: dark)").matches)
+            theme = "dark";
+        } catch (e) {}
+        document.documentElement.dataset.theme = theme;
+      })();
+    </script>
     <link rel="icon" type="image/png" href="assets/snake-face.png" />
     <link rel="stylesheet" href="style.css" />
   </head>
@@ -17,15 +29,36 @@
           <img src="assets/snake-face.png" alt="" class="title-face" />
           Mumu
         </h1>
-        <div class="scores">
-          <div class="score-card">
-            <span class="score-label">now</span>
-            <span class="score-value" id="score">0</span>
+        <div class="header-tools">
+          <div class="scores">
+            <div class="score-card">
+              <span class="score-label">now</span>
+              <span class="score-value" id="score">0</span>
+            </div>
+            <div class="score-card">
+              <span class="score-label">best</span>
+              <span class="score-value" id="high-score">0</span>
+            </div>
           </div>
-          <div class="score-card">
-            <span class="score-label">best</span>
-            <span class="score-value" id="high-score">0</span>
-          </div>
+          <button
+            id="theme-btn"
+            class="theme-btn"
+            type="button"
+            aria-pressed="false"
+            aria-label="Switch to dark mode"
+          >
+            <svg class="theme-icon icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M15.4 3.6a8.2 8.2 0 1 0 5 14.4 7.1 7.1 0 0 1-9.6-9.4 8 8 0 0 0 4.6-5Z"
+              />
+            </svg>
+            <svg class="theme-icon icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="4.1" />
+              <path
+                d="M12 2.8v2.3M12 18.9v2.3M2.8 12h2.3M18.9 12h2.3M5.2 5.2l1.6 1.6M17.2 17.2l1.6 1.6M5.2 18.8l1.6-1.6M17.2 6.8l1.6-1.6"
+              />
+            </svg>
+          </button>
         </div>
       </header>
 

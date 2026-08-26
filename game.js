@@ -15,6 +15,7 @@
   const overlayText = document.getElementById("overlay-text");
   const playBtn = document.getElementById("play-btn");
   const pauseBtn = document.getElementById("pause-btn");
+  const themeBtn = document.getElementById("theme-btn");
 
   const faceImg = new Image();
   faceImg.src = "assets/snake-face.png";
@@ -116,10 +117,41 @@
 
   // --- Rendering ---
 
+  const THEME_KEY = "mumu-theme";
+  let palette = {};
+
+  function refreshPalette() {
+    const styles = getComputedStyle(document.documentElement);
+    const read = (name) => styles.getPropertyValue(name).trim();
+    palette = {
+      board: read("--board"),
+      felt: read("--felt"),
+      apple: read("--apple"),
+      snakeLine: read("--snake-line"),
+      foodStem: read("--food-stem"),
+    };
+  }
+
+  function currentTheme() {
+    return document.documentElement.dataset.theme === "dark" ? "dark" : "light";
+  }
+
+  function applyTheme(theme) {
+    document.documentElement.dataset.theme = theme;
+    const dark = theme === "dark";
+    themeBtn.setAttribute("aria-pressed", String(dark));
+    themeBtn.setAttribute(
+      "aria-label",
+      dark ? "Switch to light mode" : "Switch to dark mode",
+    );
+    refreshPalette();
+    if (snake) render(performance.now());
+  }
+
   function drawBoard() {
-    ctx.fillStyle = "#d8e4f7";
+    ctx.fillStyle = palette.board;
     ctx.fillRect(0, 0, boardSize, boardSize);
-    ctx.fillStyle = "#ded6f5";
+    ctx.fillStyle = palette.felt;
     for (let y = 0; y < GRID; y++) {
       for (let x = 0; x < GRID; x++) {
         if ((x + y) % 2 === 0) ctx.fillRect(x * CELL, y * CELL, CELL, CELL);
@@ -134,14 +166,14 @@
     const r = CELL * 0.3 * pulse;
 
     ctx.beginPath();
-    ctx.fillStyle = "#c44536";
+    ctx.fillStyle = palette.apple;
     ctx.arc(cx, cy, r, 0, Math.PI * 2);
     ctx.fill();
     ctx.lineWidth = Math.max(1.5, CELL * 0.07);
-    ctx.strokeStyle = "#343056";
+    ctx.strokeStyle = palette.snakeLine;
     ctx.stroke();
 
-    ctx.fillStyle = "#3d6b3a";
+    ctx.fillStyle = palette.foodStem;
     ctx.beginPath();
     ctx.ellipse(
       cx + r * 0.28,
@@ -179,7 +211,7 @@
       }
     };
 
-    drawBody(CELL * 0.1, () => "#343056");
+    drawBody(CELL * 0.1, () => palette.snakeLine);
     drawBody(0, (i) => segmentColor(i, snake.length));
 
     // Head: the face image, rotated so its top points where the snake travels.
@@ -652,6 +684,25 @@
   });
 
   playBtn.addEventListener("click", start);
+
+  applyTheme(currentTheme());
+
+  themeBtn.addEventListener("click", () => {
+    const next = currentTheme() === "dark" ? "light" : "dark";
+    try {
+      localStorage.setItem(THEME_KEY, next);
+    } catch (e) {}
+    applyTheme(next);
+  });
+
+  window
+    .matchMedia("(prefers-color-scheme: dark)")
+    .addEventListener("change", (e) => {
+      try {
+        if (localStorage.getItem(THEME_KEY)) return;
+      } catch (err) {}
+      applyTheme(e.matches ? "dark" : "light");
+    });
 
   if (window.matchMedia("(pointer: coarse)").matches) {
     overlayText.textContent = "Swipe the board or tap the arrows.";
