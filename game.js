@@ -14,6 +14,7 @@
   const overlayTitle = document.getElementById("overlay-title");
   const overlayText = document.getElementById("overlay-text");
   const playBtn = document.getElementById("play-btn");
+  const pauseBtn = document.getElementById("pause-btn");
 
   const faceImg = new Image();
   faceImg.src = "assets/snake-face.png";
@@ -228,10 +229,16 @@
     requestAnimationFrame(loop);
   }
 
+  function setPausedChrome(paused) {
+    pauseBtn.classList.toggle("is-paused", paused);
+    pauseBtn.setAttribute("aria-label", paused ? "Resume" : "Pause");
+  }
+
   function start() {
     reset();
     state = "playing";
     lastTick = performance.now();
+    setPausedChrome(false);
     overlay.classList.remove("visible");
   }
 
@@ -245,6 +252,7 @@
   function gameOver() {
     state = "over";
     setAutoPlay(false);
+    setPausedChrome(false);
     if (score > highScore) {
       highScore = score;
       localStorage.setItem("snake-high-score", highScore);
@@ -262,6 +270,7 @@
   function win() {
     state = "over";
     setAutoPlay(false);
+    setPausedChrome(false);
     if (score > highScore) {
       highScore = score;
       localStorage.setItem("snake-high-score", highScore);
@@ -273,9 +282,11 @@
   function togglePause() {
     if (state === "playing") {
       state = "paused";
+      setPausedChrome(true);
       showOverlay("Hold on.", "Mumu is waiting.", "Back");
     } else if (state === "paused") {
       state = "playing";
+      setPausedChrome(false);
       lastTick = performance.now();
       overlay.classList.remove("visible");
     }
@@ -635,7 +646,7 @@
     });
   });
 
-  document.getElementById("pause-btn").addEventListener("pointerdown", (e) => {
+  pauseBtn.addEventListener("pointerdown", (e) => {
     e.preventDefault();
     if (state === "playing" || state === "paused") togglePause();
   });

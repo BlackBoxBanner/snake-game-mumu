@@ -263,7 +263,6 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.05rem;
   color: var(--ink);
   background: #e8e6f9;
   border: none;
@@ -271,6 +270,29 @@ body {
   cursor: pointer;
   touch-action: none;
   box-shadow: 0 3px 0 #bfb8e2;
+}
+
+.dpad-icon {
+  display: block;
+  width: 42%;
+  height: 42%;
+  fill: currentColor;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+
+.dpad-left .dpad-icon {
+  transform: rotate(-90deg);
+}
+
+.dpad-right .dpad-icon {
+  transform: rotate(90deg);
+}
+
+.dpad-down .dpad-icon {
+  transform: rotate(180deg);
 }
 
 .dpad-btn:active {
@@ -294,10 +316,28 @@ body {
 .dpad-pause {
   grid-area: pause;
   color: var(--ink);
-  font-size: 0.85rem;
   border-radius: 50%;
   background: var(--amber);
   box-shadow: 0 3px 0 var(--amber-press);
+}
+
+.dpad-pause .dpad-icon {
+  width: 36%;
+  height: 36%;
+  stroke-width: 0;
+}
+
+.dpad-pause .icon-play {
+  display: none;
+}
+
+.dpad-pause.is-paused .icon-pause {
+  display: none;
+}
+
+.dpad-pause.is-paused .icon-play {
+  display: block;
+  stroke-width: 1.6;
 }
 
 @media (pointer: coarse) {
