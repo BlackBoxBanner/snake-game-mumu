@@ -383,6 +383,46 @@ body {
   border-color: var(--moss);
 }
 
+.auto-speed {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.auto-speed[hidden] {
+  display: none;
+}
+
+.auto-speed button {
+  padding: 3px 10px;
+  font-family: inherit;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--ink-soft);
+  background: transparent;
+  border: 1.5px solid var(--line);
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.auto-speed button:hover {
+  color: var(--ink);
+  border-color: var(--ink);
+}
+
+.auto-speed button:active {
+  transform: translateY(1px);
+}
+
+.auto-speed button[aria-pressed="true"] {
+  color: var(--paper);
+  background: var(--moss);
+  border-color: var(--moss);
+}
+
 .action-row {
   display: flex;
   align-items: center;

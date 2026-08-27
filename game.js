@@ -143,6 +143,7 @@
       ariaLoadout: "Choose boosts for next run",
       ariaShrinkPotion: "Use shrink potion",
       ariaSourceFiles: "Source files",
+      ariaAutoSpeed: "Auto speed",
     },
     th: {
       scoreNow: "ตอนนี้",
@@ -223,6 +224,7 @@
       ariaLoadout: "เลือกบูสต์สำหรับรอบถัดไป",
       ariaShrinkPotion: "ใช้ยาเล็ก",
       ariaSourceFiles: "ไฟล์โค้ด",
+      ariaAutoSpeed: "ความเร็วออโต้",
     },
   };
 
@@ -302,6 +304,9 @@
       .getElementById("swipe-pad")
       .setAttribute("aria-label", t("ariaSwipePad"));
     loadoutTogglesEl.setAttribute("aria-label", t("ariaLoadout"));
+    document
+      .getElementById("auto-speed")
+      .setAttribute("aria-label", t("ariaAutoSpeed"));
     shopCloseBtn.setAttribute("aria-label", t("ariaClose"));
     document
       .getElementById("source-close-btn")
@@ -660,12 +665,14 @@
 
   // Shorter tick = faster snake. Score speeds it up until MIN_TICK_MS.
   // Slow-mo sets speedFactor < 1, which stretches the tick (slower run).
+  // Auto speed chips multiply further while autopilot is on.
   function computeTickMs() {
     const base = Math.max(
       MIN_TICK_MS,
       BASE_TICK_MS - score * SPEEDUP_MS_PER_SCORE,
     );
-    return base / run.speedFactor;
+    const mul = autoPlayEnabled ? autoSpeedMul : 1;
+    return base / (run.speedFactor * mul);
   }
 
   function syncPrevSnake() {
@@ -1159,14 +1166,17 @@
     if (state === "playing") {
       updateCoinTimers(time);
       updateGoldenAppleTimers(time);
-      if (time - lastTick >= tickMs) {
-        lastTick = time;
+      let steps = 0;
+      while (state === "playing" && time - lastTick >= tickMs && steps < 8) {
+        lastTick += tickMs;
         if (autoPlayEnabled) {
           const move = getAutoDirection();
           if (move) setDirection(move);
         }
         step();
+        steps++;
       }
+      if (steps === 8) lastTick = time;
       render(time);
     } else if (state === "transition") {
       render(time);
@@ -1386,7 +1396,31 @@
   // --- Auto-play AI ---
 
   let autoPlayEnabled = false;
+  let autoSpeedMul = 1;
   const autoPlayBtn = document.getElementById("auto-play-btn");
+  const autoSpeedEl = document.getElementById("auto-speed");
+  const AUTO_SPEEDS = [1, 2, 5, 10, 20];
+
+  function syncAutoSpeedUI() {
+    autoSpeedEl.hidden = !autoPlayEnabled;
+    for (const btn of autoSpeedEl.querySelectorAll("[data-speed]")) {
+      const pressed = Number(btn.dataset.speed) === autoSpeedMul;
+      btn.setAttribute("aria-pressed", String(pressed));
+    }
+  }
+
+  function setAutoSpeed(mul) {
+    if (!AUTO_SPEEDS.includes(mul)) return;
+    autoSpeedMul = mul;
+    tickMs = computeTickMs();
+    syncAutoSpeedUI();
+  }
+
+  autoSpeedEl.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-speed]");
+    if (!btn || !autoSpeedEl.contains(btn)) return;
+    setAutoSpeed(Number(btn.dataset.speed));
+  });
 
   const CELLS = GRID * GRID;
   const cycleIndex = [];
@@ -1650,6 +1684,8 @@
     autoPlayBtn.textContent = t(on ? "stop" : "auto");
     autoPlayBtn.setAttribute("aria-pressed", String(on));
     if (on) dirQueue = [];
+    tickMs = computeTickMs();
+    syncAutoSpeedUI();
     updateShrinkBtn();
   }
 
