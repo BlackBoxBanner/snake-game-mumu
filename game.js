@@ -3,7 +3,7 @@
 
   const GRID = 20;
   const BASE_TICK_MS = 220;
-  const MIN_TICK_MS = 70;
+  const MIN_TICK_MS = 63;
   const SPEEDUP_PER_FOOD = 4;
 
   const canvas = document.getElementById("board");
@@ -45,7 +45,7 @@
     right: { x: 1, y: 0 },
   };
 
-  let snake, dir, dirQueue, food, score, tickMs, state, lastTick;
+  let snake, dir, dirQueue, food, score, tickMs, state, lastTick, aiAssisted;
   let highScore = Number(localStorage.getItem("snake-high-score")) || 0;
   highScoreEl.textContent = highScore;
 
@@ -60,6 +60,7 @@
     dirQueue = [];
     score = 0;
     tickMs = BASE_TICK_MS;
+    aiAssisted = false;
     scoreEl.textContent = "0";
     placeFood();
   }
@@ -285,7 +286,13 @@
     state = "over";
     setAutoPlay(false);
     setPausedChrome(false);
-    if (score > highScore) {
+    if (aiAssisted) {
+      showOverlay(
+        "AI run.",
+        `${score} on autopilot — doesn't count toward Best.`,
+        "Again",
+      );
+    } else if (score > highScore) {
       highScore = score;
       localStorage.setItem("snake-high-score", highScore);
       highScoreEl.textContent = highScore;
@@ -303,12 +310,16 @@
     state = "over";
     setAutoPlay(false);
     setPausedChrome(false);
-    if (score > highScore) {
+    if (!aiAssisted && score > highScore) {
       highScore = score;
       localStorage.setItem("snake-high-score", highScore);
       highScoreEl.textContent = highScore;
     }
-    showOverlay("Stuffed.", `The whole board. ${score} points.`, "Again");
+    if (aiAssisted) {
+      showOverlay("Stuffed.", "Mumu played itself. Score not saved.", "Again");
+    } else {
+      showOverlay("Stuffed.", `The whole board. ${score} points.`, "Again");
+    }
   }
 
   function togglePause() {
@@ -597,7 +608,10 @@
     autoPlayEnabled = on;
     autoPlayBtn.textContent = on ? "Stop" : "Auto";
     autoPlayBtn.setAttribute("aria-pressed", String(on));
-    if (on) dirQueue = [];
+    if (on) {
+      aiAssisted = true;
+      dirQueue = [];
+    }
   }
 
   autoPlayBtn.addEventListener("click", () => {

@@ -67,7 +67,6 @@ body {
   min-height: 100vh;
   min-height: 100dvh;
   display: flex;
-  align-items: center;
   justify-content: center;
   font-family: "Avenir Next", "Trebuchet MS", "Segoe UI", sans-serif;
   color: var(--ink);
@@ -94,6 +93,7 @@ body {
   flex-direction: column;
   gap: 14px;
   width: min(520px, 100%);
+  margin: auto;
 }
 
 .game-header {
@@ -670,6 +670,37 @@ body.source-open {
   }
 }
 
+@media (pointer: coarse) and (orientation: portrait) {
+  .game-wrap {
+    gap: 10px;
+    height: calc(
+      100dvh - max(12px, env(safe-area-inset-top)) -
+        max(12px, env(safe-area-inset-bottom))
+    );
+  }
+
+  .board-wrap {
+    flex: 1;
+    min-height: 0;
+    width: fit-content;
+    max-width: 100%;
+    margin-inline: auto;
+  }
+
+  #board {
+    height: 100%;
+    width: auto;
+    max-width: 100%;
+    aspect-ratio: 1 / 1;
+  }
+
+  .dpad {
+    grid-template-columns: repeat(3, clamp(48px, 13vmin, 60px));
+    grid-auto-rows: clamp(48px, 13vmin, 60px);
+    gap: 6px;
+  }
+}
+
 @media (pointer: coarse) and (orientation: landscape) {
   .game-wrap {
     --chrome-h: 124px;
@@ -714,6 +745,22 @@ body.source-open {
   .title-face {
     width: 36px;
     height: 36px;
+  }
+
+  .game-header {
+    gap: 8px;
+  }
+
+  .header-tools {
+    gap: 10px;
+  }
+
+  .scores {
+    gap: 16px;
+  }
+
+  .score-value {
+    font-size: 1.45rem;
   }
 
   .hint {
