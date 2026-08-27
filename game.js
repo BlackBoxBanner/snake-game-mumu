@@ -27,7 +27,9 @@
   const shopCloseBtn = document.getElementById("shop-close-btn");
   const shopItemsEl = document.getElementById("shop-items");
   const shopCoinBalanceEl = document.getElementById("shop-coin-balance");
-  const boostBadgesEl = document.getElementById("boost-badges");
+  const loadoutEl = document.getElementById("loadout");
+  const loadoutTogglesEl = document.getElementById("loadout-toggles");
+  const loadoutPermanentEl = document.getElementById("loadout-permanent");
   const shrinkBtn = document.getElementById("shrink-btn");
 
   const faceImg = new Image();
@@ -81,6 +83,9 @@
       copy: "Copy",
       buy: "Buy",
       owned: "Owned: {n}",
+      ownedForever: "Owned",
+      shopPermanent: "Permanent",
+      loadoutTitle: "Next run",
       again: "Again",
       back: "Back",
       overlayAiRun: "AI run.",
@@ -104,11 +109,17 @@
       shop_score_boost_name: "2× score",
       shop_score_boost_desc: "Apples worth double for one run.",
       shop_magnet_name: "Coin magnet",
-      shop_magnet_desc: "Coins spawn more often for one run.",
+      shop_magnet_desc: "Coins spawn more often.",
       shop_ghost_walls_name: "Ghost walls",
       shop_ghost_walls_desc: "Wrap through walls for one run.",
       shop_more_apples_name: "More apples",
-      shop_more_apples_desc: "5 apples on the board for one run.",
+      shop_more_apples_desc: "5 apples on the board.",
+      shop_shield_name: "Shield",
+      shop_shield_desc: "Block one crash without resetting.",
+      shop_head_start_name: "Head start",
+      shop_head_start_desc: "Begin with 5 points already scored.",
+      shop_lucky_coins_name: "Lucky coins",
+      shop_lucky_coins_desc: "Coins stay on the board 50% longer.",
       boost_slow_start: "Slow-mo",
       boost_revive: "Extra life",
       boost_shrink: "Shrink",
@@ -116,6 +127,9 @@
       boost_magnet: "Magnet",
       boost_ghost_walls: "Ghost walls",
       boost_more_apples: "More apples",
+      boost_shield: "Shield",
+      boost_head_start: "Head start",
+      boost_lucky_coins: "Lucky coins",
       ariaThemeDark: "Switch to dark mode",
       ariaThemeLight: "Switch to light mode",
       ariaLangTh: "Switch to Thai",
@@ -128,7 +142,7 @@
       ariaMoveRight: "Move right",
       ariaClose: "Close",
       ariaDpad: "Direction controls",
-      ariaBoosts: "Boosts for next run",
+      ariaLoadout: "Choose boosts for next run",
       ariaShrinkPotion: "Use shrink potion",
       ariaSourceFiles: "Source files",
     },
@@ -152,6 +166,9 @@
       copy: "คัดลอก",
       buy: "ซื้อ",
       owned: "มี: {n}",
+      ownedForever: "มีแล้ว",
+      shopPermanent: "ถาวร",
+      loadoutTitle: "รอบถัดไป",
       again: "อีกครั้ง",
       back: "กลับ",
       overlayAiRun: "เล่นออโต้.",
@@ -175,11 +192,17 @@
       shop_score_boost_name: "คะแนน x2",
       shop_score_boost_desc: "แอปเปิ้ลได้คะแนนสองเท่าต่อรอบ",
       shop_magnet_name: "แม่เหล็กดูดเหรียญ",
-      shop_magnet_desc: "เหรียญโผล่บ่อยขึ้นต่อรอบ",
+      shop_magnet_desc: "เหรียญโผล่บ่อยขึ้น",
       shop_ghost_walls_name: "กำแพงผี",
       shop_ghost_walls_desc: "ทะลุกำแพงได้ต่อรอบ",
       shop_more_apples_name: "แอปเปิ้ลเพิ่ม",
-      shop_more_apples_desc: "มี 5 แอปเปิ้ลบนกระดานต่อรอบ",
+      shop_more_apples_desc: "มี 5 แอปเปิ้ลบนกระดาน",
+      shop_shield_name: "โล่",
+      shop_shield_desc: "กันการชนครั้งหนึ่งโดยไม่รีเซ็ต",
+      shop_head_start_name: "เริ่มนำ",
+      shop_head_start_desc: "เริ่มด้วย 5 คะแนน",
+      shop_lucky_coins_name: "เหรียญโชคดี",
+      shop_lucky_coins_desc: "เหรียญอยู่บนกระดานนานขึ้น 50%",
       boost_slow_start: "สโลว์โม",
       boost_revive: "ชีวิตพิเศษ",
       boost_shrink: "ย่อ",
@@ -187,6 +210,9 @@
       boost_magnet: "แม่เหล็ก",
       boost_ghost_walls: "กำแพงผี",
       boost_more_apples: "แอปเปิ้ล+",
+      boost_shield: "โล่",
+      boost_head_start: "เริ่มนำ",
+      boost_lucky_coins: "เหรียญโชคดี",
       ariaThemeDark: "เปลี่ยนเป็นโหมดมืด",
       ariaThemeLight: "เปลี่ยนเป็นโหมดสว่าง",
       ariaLangTh: "เปลี่ยนเป็นภาษาไทย",
@@ -199,7 +225,7 @@
       ariaMoveRight: "เลื่อนขวา",
       ariaClose: "ปิด",
       ariaDpad: "ปุ่มควบคุมทิศทาง",
-      ariaBoosts: "บูสต์สำหรับรอบถัดไป",
+      ariaLoadout: "เลือกบูสต์สำหรับรอบถัดไป",
       ariaShrinkPotion: "ใช้ยาเล็ก",
       ariaSourceFiles: "ไฟล์โค้ด",
     },
@@ -278,7 +304,7 @@
     );
     shrinkBtn.setAttribute("aria-label", t("ariaShrinkPotion"));
     document.getElementById("dpad").setAttribute("aria-label", t("ariaDpad"));
-    boostBadgesEl.setAttribute("aria-label", t("ariaBoosts"));
+    loadoutTogglesEl.setAttribute("aria-label", t("ariaLoadout"));
     shopCloseBtn.setAttribute("aria-label", t("ariaClose"));
     document
       .getElementById("source-close-btn")
@@ -305,7 +331,7 @@
     applyAriaI18n();
     setAutoPlay(autoPlayEnabled);
     updateShrinkBtn();
-    updateBoostBadges();
+    renderLoadout();
     if (!shopModal.hidden) renderShop();
     if (overlay.classList.contains("visible")) refreshOverlay();
     else if (state === "idle") {
@@ -319,6 +345,8 @@
   const WALLET_SALT = "mumu-snake-v1";
   const COINS_KEY = "mumu-coins";
   const INVENTORY_KEY = "mumu-inventory";
+  const LOADOUT_KEY = "mumu-loadout";
+  const HIGH_SCORE_KEY = "snake-high-score";
 
   function hashValue(str) {
     let h = 5381;
@@ -346,6 +374,21 @@
     } catch {
       return defaultVal;
     }
+  }
+
+  function loadHighScore() {
+    try {
+      const raw = localStorage.getItem(HIGH_SCORE_KEY);
+      if (!raw) return 0;
+      const secure = loadSecure(HIGH_SCORE_KEY, -1);
+      if (secure >= 0) return secure;
+      const legacy = Number(raw);
+      if (Number.isFinite(legacy) && legacy >= 0) {
+        saveSecure(HIGH_SCORE_KEY, legacy);
+        return legacy;
+      }
+    } catch {}
+    return 0;
   }
 
   function saveSecureObject(key, obj) {
@@ -377,20 +420,42 @@
     magnet: 0,
     ghost_walls: 0,
     more_apples: 0,
+    shield: 0,
+    head_start: 0,
+    lucky_coins: 0,
   };
 
   const SHOP_ITEMS = [
-    { id: "slow_start", price: 20 },
-    { id: "revive", price: 35 },
-    { id: "shrink", price: 25 },
-    { id: "score_boost", price: 30 },
-    { id: "magnet", price: 18 },
-    { id: "ghost_walls", price: 45 },
-    { id: "more_apples", price: 22 },
+    { id: "slow_start", price: 1 },
+    { id: "shrink", price: 1 },
+    { id: "head_start", price: 1 },
+    { id: "revive", price: 2 },
+    { id: "score_boost", price: 2 },
+    { id: "ghost_walls", price: 2 },
+    { id: "shield", price: 2 },
+    { id: "magnet", price: 18, permanent: true },
+    { id: "lucky_coins", price: 15, permanent: true },
+    { id: "more_apples", price: 22, permanent: true },
   ];
+
+  const LOADOUT_KEYS = [
+    "slow_start",
+    "revive",
+    "score_boost",
+    "ghost_walls",
+    "shrink",
+    "shield",
+    "head_start",
+  ];
+  const PERMANENT_KEYS = ["magnet", "more_apples", "lucky_coins"];
+
+  const DEFAULT_LOADOUT = Object.fromEntries(
+    LOADOUT_KEYS.map((key) => [key, false]),
+  );
 
   let coins = loadSecure(COINS_KEY, 0);
   let inventory = loadSecureObject(INVENTORY_KEY, DEFAULT_INVENTORY);
+  let loadout = loadSecureObject(LOADOUT_KEY, DEFAULT_LOADOUT);
 
   function saveCoins() {
     saveSecure(COINS_KEY, coins);
@@ -399,9 +464,21 @@
 
   function saveInventory() {
     saveSecureObject(INVENTORY_KEY, inventory);
-    updateBoostBadges();
+    syncLoadout();
+    renderLoadout();
     updateShrinkBtn();
     renderShop();
+  }
+
+  function saveLoadout() {
+    saveSecureObject(LOADOUT_KEY, loadout);
+    renderLoadout();
+  }
+
+  function syncLoadout() {
+    for (const key of LOADOUT_KEYS) {
+      if (inventory[key] <= 0) loadout[key] = false;
+    }
   }
 
   function addCoins(n) {
@@ -422,13 +499,15 @@
     foods,
     coin,
     coinNextSpawnAt,
+    goldenApple,
+    goldenNextSpawnAt,
     score,
     tickMs,
     state,
     lastTick,
     aiAssisted,
     run;
-  let highScore = Number(localStorage.getItem("snake-high-score")) || 0;
+  let highScore = loadHighScore();
   highScoreEl.textContent = highScore;
   updateCoinUI();
 
@@ -436,10 +515,12 @@
     return {
       speedFactor: 1,
       revives: 0,
+      shield: 0,
       scorePerApple: 1,
       coinBoost: false,
       ghostWalls: false,
       appleTarget: DEFAULT_APPLE_TARGET,
+      shrinkArmed: false,
     };
   }
 
@@ -448,6 +529,7 @@
     for (const s of snake) set.add(`${s.x},${s.y}`);
     for (const f of foods) set.add(`${f.x},${f.y}`);
     if (coin) set.add(`${coin.x},${coin.y}`);
+    if (goldenApple) set.add(`${goldenApple.x},${goldenApple.y}`);
     return set;
   }
 
@@ -485,7 +567,8 @@
     }
     const cell = free[Math.floor(Math.random() * free.length)];
     const now = performance.now();
-    const lifetime = run.coinBoost ? 9000 : 6000;
+    let lifetime = run.coinBoost ? 9000 : 6000;
+    if (inventory.lucky_coins > 0) lifetime *= 1.5;
     coin = {
       x: cell.x,
       y: cell.y,
@@ -507,37 +590,82 @@
     }
   }
 
+  function scheduleNextGoldenApple(fromTime) {
+    goldenNextSpawnAt = fromTime + 20000 + Math.random() * 15000;
+  }
+
+  function spawnGoldenApple() {
+    const free = freeCells();
+    if (!free.length) {
+      scheduleNextGoldenApple(performance.now());
+      return;
+    }
+    const cell = free[Math.floor(Math.random() * free.length)];
+    const now = performance.now();
+    goldenApple = {
+      x: cell.x,
+      y: cell.y,
+      spawnAt: now,
+      expiresAt: now + 7000,
+    };
+  }
+
+  function updateGoldenAppleTimers(time) {
+    if (state !== "playing" || aiAssisted) return;
+    if (goldenApple) {
+      if (time >= goldenApple.expiresAt) {
+        goldenApple = null;
+        scheduleNextGoldenApple(time);
+      }
+    } else if (goldenNextSpawnAt && time >= goldenNextSpawnAt) {
+      spawnGoldenApple();
+      goldenNextSpawnAt = null;
+    }
+  }
+
   function applyRunBoosts() {
     run = defaultRun();
     if (aiAssisted) return;
 
-    const consume = (key, apply) => {
-      if (inventory[key] > 0) {
+    const consumeIfArmed = (key, apply) => {
+      if (loadout[key] && inventory[key] > 0) {
         inventory[key]--;
+        loadout[key] = false;
         apply();
       }
     };
 
-    consume("slow_start", () => {
+    consumeIfArmed("slow_start", () => {
       run.speedFactor = 0.65;
     });
-    consume("revive", () => {
+    consumeIfArmed("revive", () => {
       run.revives = 1;
     });
-    consume("score_boost", () => {
+    consumeIfArmed("score_boost", () => {
       run.scorePerApple = 2;
     });
-    consume("magnet", () => {
-      run.coinBoost = true;
-    });
-    consume("ghost_walls", () => {
+    consumeIfArmed("ghost_walls", () => {
       run.ghostWalls = true;
     });
-    consume("more_apples", () => {
-      run.appleTarget = 5;
+    consumeIfArmed("shield", () => {
+      run.shield = 1;
+    });
+    consumeIfArmed("head_start", () => {
+      score = 5;
+      scoreEl.textContent = score;
+      tickMs = computeTickMs();
     });
 
+    if (loadout.shrink && inventory.shrink > 0) {
+      run.shrinkArmed = true;
+      loadout.shrink = false;
+    }
+
+    if (inventory.magnet > 0) run.coinBoost = true;
+    if (inventory.more_apples > 0) run.appleTarget = 5;
+
     saveInventory();
+    saveLoadout();
   }
 
   // Shorter tick = faster snake. Score speeds it up until MIN_TICK_MS.
@@ -563,6 +691,8 @@
     foods = [];
     coin = null;
     coinNextSpawnAt = null;
+    goldenApple = null;
+    goldenNextSpawnAt = null;
     scoreEl.textContent = "0";
     tickMs = computeTickMs();
     spawnApples();
@@ -590,6 +720,8 @@
     state = "transition";
     coin = null;
     coinNextSpawnAt = null;
+    goldenApple = null;
+    goldenNextSpawnAt = null;
     if (boardTransition) {
       boardTransition.hidden = false;
       boardTransition.classList.remove("is-active");
@@ -603,6 +735,7 @@
       state = "playing";
       lastTick = performance.now();
       scheduleNextCoin(lastTick);
+      scheduleNextGoldenApple(lastTick);
       if (boardTransition) {
         boardTransition.classList.remove("is-active");
         boardTransition.hidden = true;
@@ -625,14 +758,25 @@
       const occ = occupiedCells();
       if (occ.has(`${coin.x},${coin.y}`)) coin = null;
     }
+    if (goldenApple) {
+      const occ = occupiedCells();
+      if (occ.has(`${goldenApple.x},${goldenApple.y}`)) goldenApple = null;
+    }
   }
 
   function useShrink() {
-    if (state !== "playing" || aiAssisted || inventory.shrink <= 0) return;
+    if (
+      state !== "playing" ||
+      aiAssisted ||
+      !run.shrinkArmed ||
+      inventory.shrink <= 0
+    )
+      return;
     if (snake.length <= 3) return;
     const newLen = Math.max(3, Math.floor(snake.length / 2));
     snake = snake.slice(0, newLen);
     inventory.shrink--;
+    run.shrinkArmed = false;
     saveInventory();
   }
 
@@ -664,6 +808,10 @@
       (s, i) => i < snake.length - 1 && s.x === head.x && s.y === head.y,
     );
     if (hitWall || hitSelf) {
+      if (run.shield > 0 && !aiAssisted) {
+        run.shield--;
+        return;
+      }
       if (run.revives > 0 && !aiAssisted) {
         run.revives--;
         reviveSnake();
@@ -693,7 +841,17 @@
       scheduleNextCoin(performance.now());
     }
 
-    if (ate) {
+    let ateGolden = false;
+    if (goldenApple && head.x === goldenApple.x && head.y === goldenApple.y) {
+      score += 5 * run.scorePerApple;
+      scoreEl.textContent = score;
+      tickMs = computeTickMs();
+      goldenApple = null;
+      scheduleNextGoldenApple(performance.now());
+      ateGolden = true;
+    }
+
+    if (ate || ateGolden) {
       if (snake.length === GRID * GRID) {
         boardCleared();
         return;
@@ -724,6 +882,7 @@
       foodStem: read("--food-stem"),
       coin: read("--coin"),
       coinShine: read("--coin-shine"),
+      gold: read("--gold"),
     };
   }
 
@@ -806,8 +965,41 @@
     ctx.fill();
   }
 
+  function drawGoldenApple(time) {
+    if (!goldenApple) return;
+    const remaining = goldenApple.expiresAt - time;
+    if (remaining <= 2000 && Math.floor(time / 120) % 2 === 0) return;
+
+    const cx = (goldenApple.x + 0.5) * CELL;
+    const cy = (goldenApple.y + 0.5) * CELL;
+    const pulse = 1 + 0.07 * Math.sin(time / 220);
+    const r = CELL * 0.32 * pulse;
+
+    ctx.beginPath();
+    ctx.fillStyle = palette.gold;
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.lineWidth = Math.max(1.5, CELL * 0.07);
+    ctx.strokeStyle = palette.snakeLine;
+    ctx.stroke();
+
+    ctx.fillStyle = palette.foodStem;
+    ctx.beginPath();
+    ctx.ellipse(
+      cx + r * 0.28,
+      cy - r * 1.02,
+      r * 0.34,
+      r * 0.16,
+      -0.65,
+      0,
+      Math.PI * 2,
+    );
+    ctx.fill();
+  }
+
   function drawFoods(time) {
     for (const f of foods) drawApple(f, time);
+    drawGoldenApple(time);
     drawCoin(time);
   }
 
@@ -839,6 +1031,10 @@
     return false;
   }
 
+  function segmentsAdjacent(a, b) {
+    return Math.abs(a.x - b.x) + Math.abs(a.y - b.y) === 1;
+  }
+
   function drawSnake() {
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
@@ -850,8 +1046,28 @@
         const taper = 1 - 0.32 * (i / (snake.length - 1));
         ctx.strokeStyle = colorFn(i);
         ctx.lineWidth = CELL * 0.72 * taper + widthExtra;
+
+        if (segmentsAdjacent(a, b)) {
+          ctx.beginPath();
+          ctx.moveTo((a.x + 0.5) * CELL, (a.y + 0.5) * CELL);
+          ctx.lineTo((b.x + 0.5) * CELL, (b.y + 0.5) * CELL);
+          ctx.stroke();
+          continue;
+        }
+
+        let dx = 0;
+        let dy = 0;
+        if (Math.abs(a.x - b.x) > 1) dx = Math.sign(a.x - b.x);
+        else if (Math.abs(a.y - b.y) > 1) dy = Math.sign(a.y - b.y);
+        else continue;
+
         ctx.beginPath();
         ctx.moveTo((a.x + 0.5) * CELL, (a.y + 0.5) * CELL);
+        ctx.lineTo((a.x + dx + 0.5) * CELL, (a.y + dy + 0.5) * CELL);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo((b.x - dx + 0.5) * CELL, (b.y - dy + 0.5) * CELL);
         ctx.lineTo((b.x + 0.5) * CELL, (b.y + 0.5) * CELL);
         ctx.stroke();
       }
@@ -900,6 +1116,7 @@
   function loop(time) {
     if (state === "playing") {
       updateCoinTimers(time);
+      updateGoldenAppleTimers(time);
       if (time - lastTick >= tickMs) {
         lastTick = time;
         if (autoPlayEnabled) {
@@ -934,10 +1151,12 @@
     state = "playing";
     lastTick = performance.now();
     scheduleNextCoin(lastTick);
+    scheduleNextGoldenApple(lastTick);
     setPausedChrome(false);
     overlayState = null;
     overlay.classList.remove("visible");
     updateShrinkBtn();
+    renderLoadout();
   }
 
   function showOverlay(titleKey, textKey, btnKey, vars = {}) {
@@ -952,11 +1171,13 @@
     setPausedChrome(false);
     coin = null;
     coinNextSpawnAt = null;
+    goldenApple = null;
+    goldenNextSpawnAt = null;
     if (aiAssisted) {
       showOverlay("overlayAiRun", "overlayAiRunText", "again", { score });
     } else if (score > highScore) {
       highScore = score;
-      localStorage.setItem("snake-high-score", highScore);
+      saveSecure(HIGH_SCORE_KEY, highScore);
       highScoreEl.textContent = highScore;
       showOverlay("overlayNewBest", "overlayNewBestText", "again", { score });
     } else {
@@ -966,6 +1187,7 @@
       });
     }
     updateShrinkBtn();
+    renderLoadout();
   }
 
   function togglePause() {
@@ -973,46 +1195,68 @@
       state = "paused";
       setPausedChrome(true);
       showOverlay("overlayPause", "overlayPauseText", "back");
+      renderLoadout();
     } else if (state === "paused") {
       state = "playing";
       setPausedChrome(false);
       overlayState = null;
       lastTick = performance.now();
       overlay.classList.remove("visible");
+      renderLoadout();
     }
   }
 
-  // --- Shop UI ---
+  // --- Loadout & shop UI ---
 
-  function updateBoostBadges() {
-    const runStartKeys = [
-      "slow_start",
-      "revive",
-      "score_boost",
-      "magnet",
-      "ghost_walls",
-      "more_apples",
-    ];
-    const badges = [];
-    for (const key of runStartKeys) {
+  function toggleLoadout(key) {
+    if (inventory[key] <= 0) return;
+    loadout[key] = !loadout[key];
+    saveLoadout();
+  }
+
+  function renderLoadout() {
+    syncLoadout();
+    const showLoadout =
+      state !== "playing" &&
+      (LOADOUT_KEYS.some((key) => inventory[key] > 0) ||
+        PERMANENT_KEYS.some((key) => inventory[key] > 0));
+
+    loadoutEl.hidden = !showLoadout;
+    if (!showLoadout) return;
+
+    const toggles = [];
+    for (const key of LOADOUT_KEYS) {
       const count = inventory[key];
-      if (count > 0) {
-        badges.push(
-          `<span class="boost-badge">${boostLabel(key)}${count > 1 ? ` ×${count}` : ""}</span>`,
+      if (count <= 0) continue;
+      const armed = !!loadout[key];
+      toggles.push(
+        `<button type="button" class="loadout-toggle${armed ? " is-armed" : ""}" data-loadout="${key}" aria-pressed="${armed}">${boostLabel(key)}${count > 1 ? ` ×${count}` : ""}</button>`,
+      );
+    }
+    loadoutTogglesEl.innerHTML = toggles.join("");
+
+    const permanents = [];
+    for (const key of PERMANENT_KEYS) {
+      if (inventory[key] > 0) {
+        permanents.push(
+          `<span class="loadout-permanent-badge">${boostLabel(key)}</span>`,
         );
       }
     }
-    if (inventory.shrink > 0) {
-      badges.push(
-        `<span class="boost-badge">${boostLabel("shrink")}${inventory.shrink > 1 ? ` ×${inventory.shrink}` : ""}</span>`,
-      );
-    }
-    boostBadgesEl.innerHTML = badges.join("");
-    boostBadgesEl.hidden = badges.length === 0;
+    loadoutPermanentEl.innerHTML = permanents.join("");
+    loadoutPermanentEl.hidden = permanents.length === 0;
+
+    loadoutTogglesEl.querySelectorAll("[data-loadout]").forEach((btn) => {
+      btn.addEventListener("click", () => toggleLoadout(btn.dataset.loadout));
+    });
   }
 
   function updateShrinkBtn() {
-    const show = inventory.shrink > 0 && state === "playing" && !aiAssisted;
+    const show =
+      run.shrinkArmed &&
+      inventory.shrink > 0 &&
+      state === "playing" &&
+      !aiAssisted;
     shrinkBtn.hidden = !show;
     shrinkBtn.textContent =
       inventory.shrink > 1
@@ -1020,19 +1264,35 @@
         : t("shrink");
   }
 
-  function renderShop() {
-    shopItemsEl.innerHTML = SHOP_ITEMS.map((item) => {
-      const owned = inventory[item.id];
-      const canBuy = coins >= item.price;
-      return `<div class="shop-item">
+  function renderShopItem(item) {
+    const owned = inventory[item.id];
+    const isOwnedPermanent = item.permanent && owned > 0;
+    const canBuy = !isOwnedPermanent && coins >= item.price;
+    const ownedLabel = isOwnedPermanent
+      ? t("ownedForever")
+      : owned > 0
+        ? t("owned", { n: owned })
+        : "";
+    const btnLabel = isOwnedPermanent ? t("ownedForever") : t("buy");
+    return `<div class="shop-item">
         <div class="shop-item-info">
           <div class="shop-item-name">${shopItemName(item.id)} — ${item.price} ${t("coinsWord")}</div>
           <div class="shop-item-desc">${shopItemDesc(item.id)}</div>
-          ${owned > 0 ? `<div class="shop-item-owned">${t("owned", { n: owned })}</div>` : ""}
+          ${ownedLabel ? `<div class="shop-item-owned">${ownedLabel}</div>` : ""}
         </div>
-        <button class="shop-buy-btn" data-item="${item.id}" ${canBuy ? "" : "disabled"}>${t("buy")}</button>
+        <button class="shop-buy-btn" data-item="${item.id}" ${canBuy ? "" : "disabled"}>${btnLabel}</button>
       </div>`;
-    }).join("");
+  }
+
+  function renderShop() {
+    const consumables = SHOP_ITEMS.filter((item) => !item.permanent);
+    const permanents = SHOP_ITEMS.filter((item) => item.permanent);
+    const sections = [
+      ...consumables.map(renderShopItem),
+      `<h3 class="shop-section-title">${t("shopPermanent")}</h3>`,
+      ...permanents.map(renderShopItem),
+    ];
+    shopItemsEl.innerHTML = sections.join("");
 
     shopItemsEl.querySelectorAll(".shop-buy-btn").forEach((btn) => {
       btn.addEventListener("click", () => buyItem(btn.dataset.item));
@@ -1042,10 +1302,13 @@
   function buyItem(id) {
     const item = SHOP_ITEMS.find((i) => i.id === id);
     if (!item || coins < item.price) return;
+    if (item.permanent && inventory[id] > 0) return;
     coins -= item.price;
     inventory[id]++;
+    if (LOADOUT_KEYS.includes(id)) loadout[id] = true;
     saveCoins();
     saveInventory();
+    if (LOADOUT_KEYS.includes(id)) saveLoadout();
   }
 
   let pausedForShop = false;
@@ -1498,7 +1761,7 @@
     document.documentElement.dataset.lang === "th" ? "th" : detectLang();
   overlayState = idleOverlayKeys();
   applyLanguage(currentLang);
-  updateBoostBadges();
+  renderLoadout();
   updateShrinkBtn();
   faceImg.onload = () => render(performance.now());
   faceOpenImg.onload = () => render(performance.now());

@@ -26,6 +26,7 @@
   --scrim: rgba(52, 48, 86, 0.45);
   --coin: #d4a017;
   --coin-shine: #f5e6a3;
+  --gold: #e8c547;
 }
 
 [data-theme="dark"] {
@@ -55,6 +56,7 @@
   --scrim: rgba(0, 0, 0, 0.55);
   --coin: #e8b830;
   --coin-shine: #fff3c4;
+  --gold: #f0d060;
 }
 
 * {
@@ -413,25 +415,64 @@ body {
   border-color: var(--chip-press);
 }
 
-.boost-badges {
+.loadout {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   gap: 6px;
   min-height: 0;
 }
 
-.boost-badges:not([hidden]) {
+.loadout:not([hidden]) {
   min-height: 24px;
 }
 
-.boost-badge {
+.loadout-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.loadout-toggles,
+.loadout-permanent {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+}
+
+.loadout-toggle {
+  padding: 3px 10px;
+  font-family: inherit;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--ink-soft);
+  background: transparent;
+  border: 1.5px solid var(--line);
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.loadout-toggle.is-armed {
+  color: var(--ink);
+  background: var(--chip);
+  border-color: var(--chip-press);
+}
+
+.loadout-toggle:active {
+  transform: translateY(1px);
+}
+
+.loadout-permanent-badge {
   padding: 3px 10px;
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.04em;
-  color: var(--ink);
-  background: var(--chip);
+  color: var(--moss);
+  background: color-mix(in srgb, var(--moss) 12%, var(--chip));
   border-radius: 999px;
 }
 
@@ -475,6 +516,16 @@ body {
   flex-direction: column;
   gap: 10px;
   max-height: min(70vh, 70dvh);
+}
+
+.shop-section-title {
+  margin: 6px 0 0;
+  padding: 0 2px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
 }
 
 .shop-item {
@@ -1023,7 +1074,7 @@ body.source-open {
     justify-self: center;
   }
 
-  .boost-badges {
+  .loadout {
     grid-column: 1 / -1;
   }
 
