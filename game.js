@@ -17,6 +17,7 @@
   const overlayTitle = document.getElementById("overlay-title");
   const overlayText = document.getElementById("overlay-text");
   const boardTransition = document.getElementById("board-transition");
+  const boardToast = document.getElementById("board-toast");
   const playBtn = document.getElementById("play-btn");
   const pauseBtn = document.getElementById("pause-btn");
   const swipePadSurface = document.getElementById("swipe-pad-surface");
@@ -28,9 +29,6 @@
   const shopCloseBtn = document.getElementById("shop-close-btn");
   const shopItemsEl = document.getElementById("shop-items");
   const shopCoinBalanceEl = document.getElementById("shop-coin-balance");
-  const loadoutEl = document.getElementById("loadout");
-  const loadoutTogglesEl = document.getElementById("loadout-toggles");
-  const loadoutPermanentEl = document.getElementById("loadout-permanent");
   const shrinkBtn = document.getElementById("shrink-btn");
 
   const faceImg = new Image();
@@ -78,16 +76,15 @@
       stop: "Stop",
       shop: "Shop",
       shrink: "Shrink",
-      shrinkCount: "Shrink ({n})",
       hint: "arrows / wasd to slither · space to pause",
       source: "</> source",
       sourceTitle: "Source",
       copy: "Copy",
       buy: "Buy",
-      owned: "Owned: {n}",
       ownedForever: "Owned",
       shopPermanent: "Permanent",
-      loadoutTitle: "Next run",
+      shopActiveRun: "Active this round",
+      shopReadyNext: "Ready for next round",
       again: "Again",
       back: "Back",
       overlayAiRun: "AI run.",
@@ -100,6 +97,8 @@
       overlayStuffedAi: "Mumu played itself. Score not saved.",
       overlayStuffedWin: "The whole board. {score} points.",
       boardCleared: "Board cleared!",
+      toastShield: "Shield blocked the crash — turn away!",
+      toastRevive: "Extra life used!",
       overlayPause: "Hold on.",
       overlayPauseText: "Mumu is waiting.",
       shop_slow_start_name: "Slow-mo",
@@ -119,19 +118,9 @@
       shop_shield_name: "Shield",
       shop_shield_desc: "Block one crash without resetting.",
       shop_head_start_name: "Head start",
-      shop_head_start_desc: "Begin with 5 points already scored.",
+      shop_head_start_desc: "Instantly adds 5 points.",
       shop_lucky_coins_name: "Lucky coins",
       shop_lucky_coins_desc: "Coins stay on the board 50% longer.",
-      boost_slow_start: "Slow-mo",
-      boost_revive: "Extra life",
-      boost_shrink: "Shrink",
-      boost_score_boost: "2× score",
-      boost_magnet: "Magnet",
-      boost_ghost_walls: "Ghost walls",
-      boost_more_apples: "More apples",
-      boost_shield: "Shield",
-      boost_head_start: "Head start",
-      boost_lucky_coins: "Lucky coins",
       ariaThemeDark: "Switch to dark mode",
       ariaThemeLight: "Switch to light mode",
       ariaLangTh: "Switch to Thai",
@@ -140,7 +129,6 @@
       ariaResume: "Resume",
       ariaClose: "Close",
       ariaSwipePad: "Swipe controls",
-      ariaLoadout: "Choose boosts for next run",
       ariaShrinkPotion: "Use shrink potion",
       ariaSourceFiles: "Source files",
       ariaAutoSpeed: "Auto speed",
@@ -159,16 +147,15 @@
       stop: "หยุด",
       shop: "ร้านค้า",
       shrink: "ย่อ",
-      shrinkCount: "ย่อ ({n})",
       hint: "ลูกศร / wasd เลื้อย · เว้นวรรค หยุดชั่วคราว",
       source: "</> โค้ด",
       sourceTitle: "โค้ด",
       copy: "คัดลอก",
       buy: "ซื้อ",
-      owned: "มี: {n}",
       ownedForever: "มีแล้ว",
       shopPermanent: "ถาวร",
-      loadoutTitle: "รอบถัดไป",
+      shopActiveRun: "ใช้อยู่รอบนี้",
+      shopReadyNext: "พร้อมใช้รอบถัดไป",
       again: "อีกครั้ง",
       back: "กลับ",
       overlayAiRun: "เล่นออโต้.",
@@ -181,6 +168,8 @@
       overlayStuffedAi: "Mumu เล่นเอง คะแนนไม่บันทึก",
       overlayStuffedWin: "เต็มกระดาน {score} คะแนน",
       boardCleared: "เคลียร์กระดานแล้ว!",
+      toastShield: "โล่กันชนไว้ — รีบเลี้ยวหนี!",
+      toastRevive: "ใช้ชีวิตพิเศษแล้ว!",
       overlayPause: "เดี๋ยวก่อน.",
       overlayPauseText: "Mumu รออยู่",
       shop_slow_start_name: "สโลว์โม",
@@ -200,19 +189,9 @@
       shop_shield_name: "โล่",
       shop_shield_desc: "กันการชนครั้งหนึ่งโดยไม่รีเซ็ต",
       shop_head_start_name: "เริ่มนำ",
-      shop_head_start_desc: "เริ่มด้วย 5 คะแนน",
+      shop_head_start_desc: "ได้ 5 คะแนนทันที",
       shop_lucky_coins_name: "เหรียญโชคดี",
       shop_lucky_coins_desc: "เหรียญอยู่บนกระดานนานขึ้น 50%",
-      boost_slow_start: "สโลว์โม",
-      boost_revive: "ชีวิตพิเศษ",
-      boost_shrink: "ย่อ",
-      boost_score_boost: "x2",
-      boost_magnet: "แม่เหล็ก",
-      boost_ghost_walls: "กำแพงผี",
-      boost_more_apples: "แอปเปิ้ล+",
-      boost_shield: "โล่",
-      boost_head_start: "เริ่มนำ",
-      boost_lucky_coins: "เหรียญโชคดี",
       ariaThemeDark: "เปลี่ยนเป็นโหมดมืด",
       ariaThemeLight: "เปลี่ยนเป็นโหมดสว่าง",
       ariaLangTh: "เปลี่ยนเป็นภาษาไทย",
@@ -221,7 +200,6 @@
       ariaResume: "เล่นต่อ",
       ariaClose: "ปิด",
       ariaSwipePad: "แผ่นปัดควบคุมทิศทาง",
-      ariaLoadout: "เลือกบูสต์สำหรับรอบถัดไป",
       ariaShrinkPotion: "ใช้ยาเล็ก",
       ariaSourceFiles: "ไฟล์โค้ด",
       ariaAutoSpeed: "ความเร็วออโต้",
@@ -249,10 +227,6 @@
       str = str.replaceAll(`{${k}}`, String(v));
     }
     return str;
-  }
-
-  function boostLabel(id) {
-    return t(`boost_${id}`);
   }
 
   function shopItemName(id) {
@@ -303,7 +277,6 @@
     document
       .getElementById("swipe-pad")
       .setAttribute("aria-label", t("ariaSwipePad"));
-    loadoutTogglesEl.setAttribute("aria-label", t("ariaLoadout"));
     document
       .getElementById("auto-speed")
       .setAttribute("aria-label", t("ariaAutoSpeed"));
@@ -324,7 +297,6 @@
     applyAriaI18n();
     setAutoPlay(autoPlayEnabled);
     updateShrinkBtn();
-    renderLoadout();
     if (!shopModal.hidden) renderShop();
     if (overlay.classList.contains("visible")) refreshOverlay();
     else if (state === "idle") {
@@ -338,7 +310,7 @@
   const WALLET_SALT = "mumu-snake-v1";
   const COINS_KEY = "mumu-coins";
   const INVENTORY_KEY = "mumu-inventory";
-  const LOADOUT_KEY = "mumu-loadout";
+  const PENDING_KEY = "mumu-pending";
   const HIGH_SCORE_KEY = "snake-high-score";
 
   function hashValue(str) {
@@ -406,15 +378,8 @@
   }
 
   const DEFAULT_INVENTORY = {
-    slow_start: 0,
-    revive: 0,
-    shrink: 0,
-    score_boost: 0,
     magnet: 0,
-    ghost_walls: 0,
     more_apples: 0,
-    shield: 0,
-    head_start: 0,
     lucky_coins: 0,
   };
 
@@ -431,7 +396,7 @@
     { id: "more_apples", price: 22, permanent: true },
   ];
 
-  const LOADOUT_KEYS = [
+  const CONSUMABLE_KEYS = [
     "slow_start",
     "revive",
     "score_boost",
@@ -440,15 +405,35 @@
     "shield",
     "head_start",
   ];
-  const PERMANENT_KEYS = ["magnet", "more_apples", "lucky_coins"];
 
-  const DEFAULT_LOADOUT = Object.fromEntries(
-    LOADOUT_KEYS.map((key) => [key, false]),
+  // Consumables bought outside a run; auto-applied when the next run starts.
+  const DEFAULT_PENDING = Object.fromEntries(
+    CONSUMABLE_KEYS.map((key) => [key, false]),
   );
 
   let coins = loadSecure(COINS_KEY, 0);
   let inventory = loadSecureObject(INVENTORY_KEY, DEFAULT_INVENTORY);
-  let loadout = loadSecureObject(LOADOUT_KEY, DEFAULT_LOADOUT);
+  let pending = loadSecureObject(PENDING_KEY, DEFAULT_PENDING);
+
+  // Migrate stockpiled consumables from the old inventory system into
+  // pending boosts, so previously bought items aren't lost.
+  {
+    let migrated = false;
+    for (const key of CONSUMABLE_KEYS) {
+      if (inventory[key] > 0) pending[key] = true;
+      if (key in inventory) {
+        delete inventory[key];
+        migrated = true;
+      }
+    }
+    if (migrated) {
+      saveInventory();
+      savePending();
+    }
+    try {
+      localStorage.removeItem("mumu-loadout");
+    } catch (e) {}
+  }
 
   function saveCoins() {
     saveSecure(COINS_KEY, coins);
@@ -457,21 +442,10 @@
 
   function saveInventory() {
     saveSecureObject(INVENTORY_KEY, inventory);
-    syncLoadout();
-    renderLoadout();
-    updateShrinkBtn();
-    renderShop();
   }
 
-  function saveLoadout() {
-    saveSecureObject(LOADOUT_KEY, loadout);
-    renderLoadout();
-  }
-
-  function syncLoadout() {
-    for (const key of LOADOUT_KEYS) {
-      if (inventory[key] <= 0) loadout[key] = false;
-    }
+  function savePending() {
+    saveSecureObject(PENDING_KEY, pending);
   }
 
   function addCoins(n) {
@@ -516,7 +490,25 @@
       ghostWalls: false,
       appleTarget: DEFAULT_APPLE_TARGET,
       shrinkArmed: false,
+      headStartApplied: false,
+      // After a shield blocks a crash, the snake freezes in place until the
+      // player steers away, instead of instantly crashing again.
+      shieldHold: false,
     };
+  }
+
+  let boardToastTimer = null;
+
+  function showBoardToast(msg) {
+    boardToast.textContent = msg;
+    boardToast.hidden = false;
+    boardToast.classList.remove("is-live");
+    void boardToast.offsetWidth;
+    boardToast.classList.add("is-live");
+    clearTimeout(boardToastTimer);
+    boardToastTimer = setTimeout(() => {
+      boardToast.hidden = true;
+    }, 1900);
   }
 
   function occupiedCells() {
@@ -622,45 +614,26 @@
     run = defaultRun();
     if (aiAssisted) return;
 
-    const consumeIfArmed = (key, apply) => {
-      if (loadout[key] && inventory[key] > 0) {
-        inventory[key]--;
-        loadout[key] = false;
-        apply();
-      }
-    };
-
-    consumeIfArmed("slow_start", () => {
-      run.speedFactor = 0.65;
-    });
-    consumeIfArmed("revive", () => {
-      run.revives = 1;
-    });
-    consumeIfArmed("score_boost", () => {
-      run.scorePerApple = 2;
-    });
-    consumeIfArmed("ghost_walls", () => {
-      run.ghostWalls = true;
-    });
-    consumeIfArmed("shield", () => {
-      run.shield = 1;
-    });
-    consumeIfArmed("head_start", () => {
+    if (pending.slow_start) run.speedFactor = 0.65;
+    if (pending.revive) run.revives = 1;
+    if (pending.score_boost) run.scorePerApple = 2;
+    if (pending.ghost_walls) run.ghostWalls = true;
+    if (pending.shield) run.shield = 1;
+    if (pending.head_start) {
+      run.headStartApplied = true;
       score = 5;
       scoreEl.textContent = score;
-      tickMs = computeTickMs();
-    });
+    }
+    if (pending.shrink) run.shrinkArmed = true;
+    tickMs = computeTickMs();
 
-    if (loadout.shrink && inventory.shrink > 0) {
-      run.shrinkArmed = true;
-      loadout.shrink = false;
+    if (CONSUMABLE_KEYS.some((key) => pending[key])) {
+      for (const key of CONSUMABLE_KEYS) pending[key] = false;
+      savePending();
     }
 
     if (inventory.magnet > 0) run.coinBoost = true;
     if (inventory.more_apples > 0) run.appleTarget = 5;
-
-    saveInventory();
-    saveLoadout();
   }
 
   // Shorter tick = faster snake. Score speeds it up until MIN_TICK_MS.
@@ -770,19 +743,12 @@
   }
 
   function useShrink() {
-    if (
-      state !== "playing" ||
-      aiAssisted ||
-      !run.shrinkArmed ||
-      inventory.shrink <= 0
-    )
-      return;
+    if (state !== "playing" || aiAssisted || !run.shrinkArmed) return;
     if (snake.length <= 3) return;
     const newLen = Math.max(3, Math.floor(snake.length / 2));
     snake = snake.slice(0, newLen);
-    inventory.shrink--;
     run.shrinkArmed = false;
-    saveInventory();
+    updateShrinkBtn();
     syncPrevSnake();
   }
 
@@ -816,19 +782,24 @@
       (s, i) => i < snake.length - 1 && s.x === head.x && s.y === head.y,
     );
     if (hitWall || hitSelf) {
+      if (!aiAssisted && run.shieldHold) return;
       if (run.shield > 0 && !aiAssisted) {
         run.shield--;
+        run.shieldHold = true;
+        showBoardToast(t("toastShield"));
         return;
       }
       if (run.revives > 0 && !aiAssisted) {
         run.revives--;
         reviveSnake();
+        showBoardToast(t("toastRevive"));
         return;
       }
       gameOver();
       return;
     }
 
+    run.shieldHold = false;
     snake.unshift(head);
 
     let ate = false;
@@ -1208,7 +1179,6 @@
     overlayState = null;
     overlay.classList.remove("visible");
     updateShrinkBtn();
-    renderLoadout();
   }
 
   function showOverlay(titleKey, textKey, btnKey, vars = {}) {
@@ -1239,7 +1209,6 @@
       });
     }
     updateShrinkBtn();
-    renderLoadout();
   }
 
   function togglePause() {
@@ -1247,90 +1216,64 @@
       state = "paused";
       setPausedChrome(true);
       showOverlay("overlayPause", "overlayPauseText", "back");
-      renderLoadout();
     } else if (state === "paused") {
       state = "playing";
       setPausedChrome(false);
       overlayState = null;
       lastTick = performance.now();
       overlay.classList.remove("visible");
-      renderLoadout();
     }
   }
 
-  // --- Loadout & shop UI ---
+  // --- Shop UI ---
 
-  function toggleLoadout(key) {
-    if (inventory[key] <= 0) return;
-    loadout[key] = !loadout[key];
-    saveLoadout();
+  function runActive() {
+    return state === "playing" || state === "paused" || state === "transition";
   }
 
-  function renderLoadout() {
-    syncLoadout();
-    const showLoadout =
-      state !== "playing" &&
-      (LOADOUT_KEYS.some((key) => inventory[key] > 0) ||
-        PERMANENT_KEYS.some((key) => inventory[key] > 0));
-
-    loadoutEl.hidden = !showLoadout;
-    if (!showLoadout) return;
-
-    const toggles = [];
-    for (const key of LOADOUT_KEYS) {
-      const count = inventory[key];
-      if (count <= 0) continue;
-      const armed = !!loadout[key];
-      toggles.push(
-        `<button type="button" class="loadout-toggle${armed ? " is-armed" : ""}" data-loadout="${key}" aria-pressed="${armed}">${boostLabel(key)}${count > 1 ? ` ×${count}` : ""}</button>`,
-      );
-    }
-    loadoutTogglesEl.innerHTML = toggles.join("");
-
-    const permanents = [];
-    for (const key of PERMANENT_KEYS) {
-      if (inventory[key] > 0) {
-        permanents.push(
-          `<span class="loadout-permanent-badge">${boostLabel(key)}</span>`,
-        );
+  function boostActive(id) {
+    if (runActive() && !aiAssisted) {
+      switch (id) {
+        case "slow_start":
+          return run.speedFactor < 1;
+        case "revive":
+          return run.revives > 0;
+        case "score_boost":
+          return run.scorePerApple > 1;
+        case "ghost_walls":
+          return run.ghostWalls;
+        case "shield":
+          return run.shield > 0;
+        case "head_start":
+          return run.headStartApplied;
+        case "shrink":
+          return run.shrinkArmed;
       }
     }
-    loadoutPermanentEl.innerHTML = permanents.join("");
-    loadoutPermanentEl.hidden = permanents.length === 0;
-
-    loadoutTogglesEl.querySelectorAll("[data-loadout]").forEach((btn) => {
-      btn.addEventListener("click", () => toggleLoadout(btn.dataset.loadout));
-    });
+    return !!pending[id];
   }
 
   function updateShrinkBtn() {
-    const show =
-      run.shrinkArmed &&
-      inventory.shrink > 0 &&
-      state === "playing" &&
-      !aiAssisted;
+    const show = run.shrinkArmed && state === "playing" && !aiAssisted;
     shrinkBtn.hidden = !show;
-    shrinkBtn.textContent =
-      inventory.shrink > 1
-        ? t("shrinkCount", { n: inventory.shrink })
-        : t("shrink");
+    shrinkBtn.textContent = t("shrink");
   }
 
   function renderShopItem(item) {
-    const owned = inventory[item.id];
-    const isOwnedPermanent = item.permanent && owned > 0;
-    const canBuy = !isOwnedPermanent && coins >= item.price;
-    const ownedLabel = isOwnedPermanent
+    const isOwnedPermanent = item.permanent && inventory[item.id] > 0;
+    const active = !item.permanent && boostActive(item.id);
+    const canBuy = !isOwnedPermanent && !active && coins >= item.price;
+    const statusLabel = isOwnedPermanent
       ? t("ownedForever")
-      : owned > 0
-        ? t("owned", { n: owned })
+      : active
+        ? t(runActive() && !aiAssisted ? "shopActiveRun" : "shopReadyNext")
         : "";
     const btnLabel = isOwnedPermanent ? t("ownedForever") : t("buy");
     return `<div class="shop-item">
         <div class="shop-item-info">
           <div class="shop-item-name">${shopItemName(item.id)} — ${item.price} ${t("coinsWord")}</div>
           <div class="shop-item-desc">${shopItemDesc(item.id)}</div>
-          ${ownedLabel ? `<div class="shop-item-owned">${ownedLabel}</div>` : ""}
+          ${statusLabel ? `<div class="shop-item-owned">${statusLabel}</div>` : ""}
         </div>
         <button class="shop-buy-btn" data-item="${item.id}" ${canBuy ? "" : "disabled"}>${btnLabel}</button>
       </div>`;
@@ -1351,16 +1294,50 @@
     });
   }
 
+  function applyBoostNow(id) {
+    if (id === "slow_start") {
+      run.speedFactor = 0.65;
+      tickMs = computeTickMs();
+    } else if (id === "revive") {
+      run.revives = 1;
+    } else if (id === "score_boost") {
+      run.scorePerApple = 2;
+    } else if (id === "ghost_walls") {
+      run.ghostWalls = true;
+    } else if (id === "shield") {
+      run.shield = 1;
+    } else if (id === "head_start") {
+      run.headStartApplied = true;
+      score += 5;
+      scoreEl.textContent = score;
+      tickMs = computeTickMs();
+    } else if (id === "shrink") {
+      run.shrinkArmed = true;
+      updateShrinkBtn();
+    }
+  }
+
   function buyItem(id) {
     const item = SHOP_ITEMS.find((i) => i.id === id);
     if (!item || coins < item.price) return;
-    if (item.permanent && inventory[id] > 0) return;
-    coins -= item.price;
-    inventory[id]++;
-    if (LOADOUT_KEYS.includes(id)) loadout[id] = true;
-    saveCoins();
-    saveInventory();
-    if (LOADOUT_KEYS.includes(id)) saveLoadout();
+    if (item.permanent) {
+      if (inventory[id] > 0) return;
+      coins -= item.price;
+      inventory[id]++;
+      saveCoins();
+      saveInventory();
+    } else {
+      if (boostActive(id)) return;
+      coins -= item.price;
+      saveCoins();
+      if (runActive() && !aiAssisted) {
+        applyBoostNow(id);
+      } else {
+        pending[id] = true;
+        savePending();
+      }
+    }
+    renderShop();
   }
 
   let pausedForShop = false;
@@ -1386,6 +1363,7 @@
       lastTick = performance.now();
       pausedForShop = false;
     }
+    updateShrinkBtn();
   }
 
   shopBtn.addEventListener("click", openShop);
@@ -1860,7 +1838,6 @@
     document.documentElement.dataset.lang === "th" ? "th" : detectLang();
   overlayState = idleOverlayKeys();
   applyLanguage(currentLang);
-  renderLoadout();
   updateShrinkBtn();
   faceImg.onload = () => render(performance.now());
   faceOpenImg.onload = () => render(performance.now());
