@@ -95,22 +95,24 @@
         </div>
       </header>
 
-      <div class="board-wrap">
-        <canvas id="board" width="480" height="480"></canvas>
+      <div class="board-area">
+        <div class="board-wrap">
+          <canvas id="board" width="480" height="480"></canvas>
 
-        <div class="overlay visible" id="overlay">
-          <div class="overlay-content" id="overlay-content">
-            <img src="assets/snake-face.png" alt="" class="overlay-face" />
-            <h2 id="overlay-title">Hungry?</h2>
-            <p id="overlay-text">
-              Arrows, WASD, or a swipe. Don't bite yourself.
-            </p>
-            <button id="play-btn" class="play-btn">Go</button>
+          <div class="overlay visible" id="overlay">
+            <div class="overlay-content" id="overlay-content">
+              <img src="assets/snake-face.png" alt="" class="overlay-face" />
+              <h2 id="overlay-title">Hungry?</h2>
+              <p id="overlay-text">
+                Arrows, WASD, or a swipe. Don't bite yourself.
+              </p>
+              <button id="play-btn" class="play-btn">Go</button>
+            </div>
           </div>
-        </div>
 
-        <div class="board-transition" id="board-transition" hidden>
-          <span data-i18n="boardCleared">Board cleared!</span>
+          <div class="board-transition" id="board-transition" hidden>
+            <span data-i18n="boardCleared">Board cleared!</span>
+          </div>
         </div>
       </div>
 
