@@ -2,10 +2,11 @@
   "use strict";
 
   const GRID = 20;
-  const BASE_TICK_MS = 220;
-  const MIN_TICK_MS = 63;
-  const SPEEDUP_PER_FOOD = 4;
+  const BASE_TICK_MS = 231;
+  const MIN_TICK_MS = 72;
+  const SPEEDUP_PER_FOOD = 4.2;
   const DEFAULT_APPLE_TARGET = 3;
+  const MOUTH_OPEN_CELLS = 3;
 
   const canvas = document.getElementById("board");
   const ctx = canvas.getContext("2d");
@@ -31,6 +32,8 @@
 
   const faceImg = new Image();
   faceImg.src = "assets/snake-face.png";
+  const faceOpenImg = new Image();
+  faceOpenImg.src = "assets/snake-face-open.png";
 
   const dpr = Math.min(window.devicePixelRatio || 1, 2);
   let boardSize = 480;
@@ -809,6 +812,28 @@
     return `rgb(${lerp(143, 58)}, ${lerp(188, 106)}, ${lerp(74, 48)})`;
   }
 
+  function cellAhead(steps) {
+    let x = snake[0].x + dir.x * steps;
+    let y = snake[0].y + dir.y * steps;
+    if (run.ghostWalls) {
+      if (x < 0) x = GRID - 1;
+      else if (x >= GRID) x = 0;
+      if (y < 0) y = GRID - 1;
+      else if (y >= GRID) y = 0;
+    }
+    return { x, y };
+  }
+
+  function appleAheadOfHead() {
+    for (let steps = 1; steps <= MOUTH_OPEN_CELLS; steps++) {
+      const ahead = cellAhead(steps);
+      for (const f of foods) {
+        if (f.x === ahead.x && f.y === ahead.y) return true;
+      }
+    }
+    return false;
+  }
+
   function drawSnake() {
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
@@ -839,11 +864,17 @@
     else if (dir === DIRS.down) angle = Math.PI;
     else if (dir === DIRS.left) angle = -Math.PI / 2;
 
+    const mouthOpen = appleAheadOfHead();
+    const face =
+      mouthOpen && faceOpenImg.complete && faceOpenImg.naturalWidth
+        ? faceOpenImg
+        : faceImg;
+
     ctx.save();
     ctx.translate(cx, cy);
     ctx.rotate(angle);
-    if (faceImg.complete && faceImg.naturalWidth) {
-      ctx.drawImage(faceImg, -size / 2, -size / 2, size, size);
+    if (face.complete && face.naturalWidth) {
+      ctx.drawImage(face, -size / 2, -size / 2, size, size);
     } else {
       ctx.fillStyle = "#7a9e42";
       ctx.beginPath();
@@ -1465,6 +1496,7 @@
   updateBoostBadges();
   updateShrinkBtn();
   faceImg.onload = () => render(performance.now());
+  faceOpenImg.onload = () => render(performance.now());
   render(performance.now());
   requestAnimationFrame(loop);
 })();
