@@ -1,12 +1,12 @@
 (() => {
   "use strict";
 
-  const GRID = 20;
-  const BASE_TICK_MS = 231;
-  const MIN_TICK_MS = 72;
-  const SPEEDUP_PER_FOOD = 4.2;
-  const DEFAULT_APPLE_TARGET = 3;
-  const MOUTH_OPEN_CELLS = 3;
+  const GRID = 20; // board size in cells; bigger = more room, longer games
+  const BASE_TICK_MS = 231; // delay between moves at score 0; higher = slower start
+  const MIN_TICK_MS = 118; // late-game speed floor; lower = faster max speed
+  const SPEEDUP_MS_PER_SCORE = 2.4; // ms cut per score point; higher = ramps up faster
+  const DEFAULT_APPLE_TARGET = 3; // apples on the board at once (shop can raise this)
+  const MOUTH_OPEN_CELLS = 2; // face swaps to open mouth when an apple is this close
 
   const canvas = document.getElementById("board");
   const ctx = canvas.getContext("2d");
@@ -540,8 +540,13 @@
     saveInventory();
   }
 
+  // Shorter tick = faster snake. Score speeds it up until MIN_TICK_MS.
+  // Slow-mo sets speedFactor < 1, which stretches the tick (slower run).
   function computeTickMs() {
-    const base = Math.max(MIN_TICK_MS, BASE_TICK_MS - score * SPEEDUP_PER_FOOD);
+    const base = Math.max(
+      MIN_TICK_MS,
+      BASE_TICK_MS - score * SPEEDUP_MS_PER_SCORE,
+    );
     return base / run.speedFactor;
   }
 
