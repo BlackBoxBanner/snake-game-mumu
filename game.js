@@ -15,6 +15,7 @@
   const overlay = document.getElementById("overlay");
   const overlayTitle = document.getElementById("overlay-title");
   const overlayText = document.getElementById("overlay-text");
+  const boardTransition = document.getElementById("board-transition");
   const playBtn = document.getElementById("play-btn");
   const pauseBtn = document.getElementById("pause-btn");
   const themeBtn = document.getElementById("theme-btn");
@@ -88,6 +89,7 @@
       overlayStuffed: "Stuffed.",
       overlayStuffedAi: "Mumu played itself. Score not saved.",
       overlayStuffedWin: "The whole board. {score} points.",
+      boardCleared: "Board cleared!",
       overlayPause: "Hold on.",
       overlayPauseText: "Mumu is waiting.",
       shop_slow_start_name: "Slow-mo",
@@ -158,6 +160,7 @@
       overlayStuffed: "อิ่มแล้ว.",
       overlayStuffedAi: "Mumu เล่นเอง คะแนนไม่บันทึก",
       overlayStuffedWin: "เต็มกระดาน {score} คะแนน",
+      boardCleared: "เคลียร์กระดานแล้ว!",
       overlayPause: "เดี๋ยวก่อน.",
       overlayPauseText: "Mumu รออยู่",
       shop_slow_start_name: "สโลว์โม",
@@ -557,6 +560,49 @@
     spawnApples();
   }
 
+  function softReset() {
+    const mid = Math.floor(GRID / 2);
+    snake = [
+      { x: mid - 1, y: mid },
+      { x: mid - 2, y: mid },
+      { x: mid - 3, y: mid },
+    ];
+    dir = DIRS.right;
+    dirQueue = [];
+    foods = [];
+    tickMs = computeTickMs();
+    spawnApples();
+  }
+
+  const BOARD_TRANSITION_MS = 1400;
+  let boardTransitionTimer = null;
+
+  function boardCleared() {
+    if (state === "transition") return;
+    state = "transition";
+    coin = null;
+    coinNextSpawnAt = null;
+    if (boardTransition) {
+      boardTransition.hidden = false;
+      boardTransition.classList.remove("is-active");
+      void boardTransition.offsetWidth;
+      boardTransition.classList.add("is-active");
+    }
+    clearTimeout(boardTransitionTimer);
+    boardTransitionTimer = setTimeout(() => {
+      boardTransitionTimer = null;
+      softReset();
+      state = "playing";
+      lastTick = performance.now();
+      scheduleNextCoin(lastTick);
+      if (boardTransition) {
+        boardTransition.classList.remove("is-active");
+        boardTransition.hidden = true;
+      }
+      render(performance.now());
+    }, BOARD_TRANSITION_MS);
+  }
+
   function reviveSnake() {
     const mid = Math.floor(GRID / 2);
     snake = [
@@ -641,10 +687,14 @@
 
     if (ate) {
       if (snake.length === GRID * GRID) {
-        win();
+        boardCleared();
         return;
       }
       spawnApples();
+      if (foods.length === 0) {
+        boardCleared();
+        return;
+      }
     } else {
       snake.pop();
     }
@@ -823,6 +873,8 @@
         step();
       }
       render(time);
+    } else if (state === "transition") {
+      render(time);
     }
     requestAnimationFrame(loop);
   }
@@ -833,6 +885,12 @@
   }
 
   function start(manual = true) {
+    clearTimeout(boardTransitionTimer);
+    boardTransitionTimer = null;
+    if (boardTransition) {
+      boardTransition.classList.remove("is-active");
+      boardTransition.hidden = true;
+    }
     aiAssisted = !manual;
     reset();
     if (manual) applyRunBoosts();
@@ -870,25 +928,6 @@
         score,
         best: highScore,
       });
-    }
-    updateShrinkBtn();
-  }
-
-  function win() {
-    state = "over";
-    setAutoPlay(false);
-    setPausedChrome(false);
-    coin = null;
-    coinNextSpawnAt = null;
-    if (!aiAssisted && score > highScore) {
-      highScore = score;
-      localStorage.setItem("snake-high-score", highScore);
-      highScoreEl.textContent = highScore;
-    }
-    if (aiAssisted) {
-      showOverlay("overlayStuffed", "overlayStuffedAi", "again");
-    } else {
-      showOverlay("overlayStuffed", "overlayStuffedWin", "again", { score });
     }
     updateShrinkBtn();
   }
@@ -1312,8 +1351,8 @@
     if (e.key === " " || e.key === "Spacebar") {
       e.preventDefault();
       if (state === "playing" || state === "paused") togglePause();
-      else start();
-    } else if (e.key === "Enter" && state !== "playing") {
+      else if (state === "idle" || state === "over") start();
+    } else if (e.key === "Enter" && (state === "idle" || state === "over")) {
       start();
     } else if (
       (e.key === "x" || e.key === "X") &&
