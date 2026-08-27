@@ -24,6 +24,8 @@
   --food-stem: #3d6b3a;
   --snake-line: #343056;
   --scrim: rgba(52, 48, 86, 0.45);
+  --coin: #d4a017;
+  --coin-shine: #f5e6a3;
 }
 
 [data-theme="dark"] {
@@ -51,6 +53,8 @@
   --food-stem: #6aab5e;
   --snake-line: #12101f;
   --scrim: rgba(0, 0, 0, 0.55);
+  --coin: #e8b830;
+  --coin-shine: #fff3c4;
 }
 
 * {
@@ -68,7 +72,9 @@ body {
   min-height: 100dvh;
   display: flex;
   justify-content: center;
-  font-family: "Avenir Next", "Trebuchet MS", "Segoe UI", sans-serif;
+  font-family:
+    "Avenir Next", "Thonburi", "Sukhumvit Set", "Trebuchet MS", "Segoe UI",
+    sans-serif;
   color: var(--ink);
   background-color: var(--paper);
   background-image:
@@ -109,7 +115,9 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-family: Palatino, "Palatino Linotype", "Book Antiqua", Georgia, serif;
+  font-family:
+    Palatino, "Thonburi", "Sukhumvit Set", "Palatino Linotype", "Book Antiqua",
+    Georgia, serif;
   font-size: 2.2rem;
   font-weight: 700;
   font-style: italic;
@@ -152,7 +160,9 @@ body {
 }
 
 .score-value {
-  font-family: Palatino, "Palatino Linotype", "Book Antiqua", Georgia, serif;
+  font-family:
+    Palatino, "Thonburi", "Sukhumvit Set", "Palatino Linotype", "Book Antiqua",
+    Georgia, serif;
   font-size: 1.7rem;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
@@ -220,7 +230,9 @@ body {
 }
 
 .overlay h2 {
-  font-family: Palatino, "Palatino Linotype", "Book Antiqua", Georgia, serif;
+  font-family:
+    Palatino, "Thonburi", "Sukhumvit Set", "Palatino Linotype", "Book Antiqua",
+    Georgia, serif;
   font-size: 1.85rem;
   font-style: italic;
   letter-spacing: -0.03em;
@@ -236,8 +248,11 @@ body {
 
 .play-btn,
 .auto-play-btn,
+.shop-btn,
+.shrink-btn,
 .dpad-btn,
-.theme-btn {
+.theme-btn,
+.lang-btn {
   font-family: inherit;
 }
 
@@ -290,6 +305,169 @@ body {
   border-color: var(--moss);
 }
 
+.action-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.shop-btn,
+.shrink-btn {
+  padding: 7px 20px 8px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+  background: transparent;
+  border: 1.5px solid var(--line);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.shop-btn:hover,
+.shrink-btn:hover {
+  color: var(--ink);
+  border-color: var(--ink);
+}
+
+.shop-btn:active,
+.shrink-btn:active {
+  transform: translateY(1px);
+}
+
+.shrink-btn {
+  color: var(--ink);
+  background: var(--chip);
+  border-color: var(--chip-press);
+}
+
+.boost-badges {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  min-height: 0;
+}
+
+.boost-badges:not([hidden]) {
+  min-height: 24px;
+}
+
+.boost-badge {
+  padding: 3px 10px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  background: var(--chip);
+  border-radius: 999px;
+}
+
+.score-card-coins .score-value {
+  color: var(--coin);
+}
+
+.shop-modal[hidden] {
+  display: none;
+}
+
+.shop-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: max(12px, env(safe-area-inset-top))
+    max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom))
+    max(12px, env(safe-area-inset-left));
+}
+
+.shop-panel {
+  width: min(480px, 100%);
+}
+
+.shop-balance {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--coin);
+  padding-inline: 4px;
+}
+
+.shop-body {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 12px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: min(70vh, 70dvh);
+}
+
+.shop-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--chip);
+  border-radius: 10px;
+}
+
+.shop-item-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.shop-item-name {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.shop-item-desc {
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+  line-height: 1.35;
+  margin-top: 2px;
+}
+
+.shop-item-owned {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--moss);
+  margin-top: 4px;
+}
+
+.shop-buy-btn {
+  flex-shrink: 0;
+  padding: 7px 14px 8px;
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--ink);
+  background: var(--amber);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.shop-buy-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.shop-buy-btn:not(:disabled):active {
+  transform: translateY(1px);
+}
+
+body.shop-open {
+  overflow: hidden;
+}
+
 .hint {
   text-align: center;
   color: var(--ink-soft);
@@ -326,6 +504,42 @@ body {
   border-radius: 10px;
   cursor: pointer;
   box-shadow: 0 3px 0 var(--chip-press);
+}
+
+.lang-btn {
+  flex-shrink: 0;
+  min-width: 38px;
+  height: 38px;
+  padding: 0 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+  background: var(--chip);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0 3px 0 var(--chip-press);
+}
+
+.lang-btn:hover {
+  filter: brightness(1.05);
+}
+
+.lang-btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 var(--chip-press);
+}
+
+[data-lang="th"] .title,
+[data-lang="th"] .overlay h2,
+[data-lang="th"] .score-value,
+[data-lang="th"] .source-title {
+  letter-spacing: 0;
 }
 
 .theme-btn:hover {
@@ -410,7 +624,9 @@ body {
 }
 
 .source-title {
-  font-family: Palatino, "Palatino Linotype", "Book Antiqua", Georgia, serif;
+  font-family:
+    Palatino, "Thonburi", "Sukhumvit Set", "Palatino Linotype", "Book Antiqua",
+    Georgia, serif;
   font-size: 1.35rem;
   font-style: italic;
   font-weight: 700;
@@ -729,6 +945,15 @@ body.source-open {
   .auto-play-btn {
     grid-column: 1 / -1;
     justify-self: center;
+  }
+
+  .action-row {
+    grid-column: 1 / -1;
+    justify-self: center;
+  }
+
+  .boost-badges {
+    grid-column: 1 / -1;
   }
 
   .source-btn {

@@ -5,23 +5,32 @@
   const BASE_TICK_MS = 220;
   const MIN_TICK_MS = 63;
   const SPEEDUP_PER_FOOD = 4;
+  const DEFAULT_APPLE_TARGET = 3;
 
   const canvas = document.getElementById("board");
   const ctx = canvas.getContext("2d");
   const scoreEl = document.getElementById("score");
   const highScoreEl = document.getElementById("high-score");
+  const coinBalanceEl = document.getElementById("coin-balance");
   const overlay = document.getElementById("overlay");
   const overlayTitle = document.getElementById("overlay-title");
   const overlayText = document.getElementById("overlay-text");
   const playBtn = document.getElementById("play-btn");
   const pauseBtn = document.getElementById("pause-btn");
   const themeBtn = document.getElementById("theme-btn");
+  const langBtn = document.getElementById("lang-btn");
+  const shopBtn = document.getElementById("shop-btn");
+  const shopModal = document.getElementById("shop-modal");
+  const shopBackdrop = document.getElementById("shop-backdrop");
+  const shopCloseBtn = document.getElementById("shop-close-btn");
+  const shopItemsEl = document.getElementById("shop-items");
+  const shopCoinBalanceEl = document.getElementById("shop-coin-balance");
+  const boostBadgesEl = document.getElementById("boost-badges");
+  const shrinkBtn = document.getElementById("shrink-btn");
 
   const faceImg = new Image();
   faceImg.src = "assets/snake-face.png";
 
-  // Match the canvas bitmap to its rendered size (and device pixel ratio)
-  // so the board stays crisp at any viewport size.
   const dpr = Math.min(window.devicePixelRatio || 1, 2);
   let boardSize = 480;
   let CELL = boardSize / GRID;
@@ -45,9 +54,490 @@
     right: { x: 1, y: 0 },
   };
 
-  let snake, dir, dirQueue, food, score, tickMs, state, lastTick, aiAssisted;
+  const LANG_KEY = "mumu-lang";
+
+  const I18N = {
+    en: {
+      scoreNow: "now",
+      scoreBest: "best",
+      scoreCoins: "coins",
+      coinsWord: "coins",
+      overlayTitleIdle: "Hungry?",
+      overlayTextIdle: "Arrows, WASD, or a swipe. Don't bite yourself.",
+      overlayTextMobile: "Swipe the board or tap the arrows.",
+      playGo: "Go",
+      auto: "Auto",
+      stop: "Stop",
+      shop: "Shop",
+      shrink: "Shrink",
+      shrinkCount: "Shrink ({n})",
+      hint: "arrows / wasd to slither · space to pause",
+      source: "</> source",
+      sourceTitle: "Source",
+      copy: "Copy",
+      buy: "Buy",
+      owned: "Owned: {n}",
+      again: "Again",
+      back: "Back",
+      overlayAiRun: "AI run.",
+      overlayAiRunText: "{score} on autopilot — doesn't count toward Best.",
+      overlayNewBest: "New best.",
+      overlayNewBestText: "{score} — keep going.",
+      overlayOuch: "Ouch.",
+      overlayOuchText: "{score} this time. Best is {best}.",
+      overlayStuffed: "Stuffed.",
+      overlayStuffedAi: "Mumu played itself. Score not saved.",
+      overlayStuffedWin: "The whole board. {score} points.",
+      overlayPause: "Hold on.",
+      overlayPauseText: "Mumu is waiting.",
+      shop_slow_start_name: "Slow-mo",
+      shop_slow_start_desc: "Snake moves 35% slower for one run.",
+      shop_revive_name: "Extra life",
+      shop_revive_desc: "Revive once after crashing.",
+      shop_shrink_name: "Shrink potion",
+      shop_shrink_desc: "Halve snake length mid-run (press X).",
+      shop_score_boost_name: "2× score",
+      shop_score_boost_desc: "Apples worth double for one run.",
+      shop_magnet_name: "Coin magnet",
+      shop_magnet_desc: "Coins spawn more often for one run.",
+      shop_ghost_walls_name: "Ghost walls",
+      shop_ghost_walls_desc: "Wrap through walls for one run.",
+      shop_more_apples_name: "More apples",
+      shop_more_apples_desc: "5 apples on the board for one run.",
+      boost_slow_start: "Slow-mo",
+      boost_revive: "Extra life",
+      boost_shrink: "Shrink",
+      boost_score_boost: "2× score",
+      boost_magnet: "Magnet",
+      boost_ghost_walls: "Ghost walls",
+      boost_more_apples: "More apples",
+      ariaThemeDark: "Switch to dark mode",
+      ariaThemeLight: "Switch to light mode",
+      ariaLangTh: "Switch to Thai",
+      ariaLangEn: "Switch to English",
+      ariaPause: "Pause",
+      ariaResume: "Resume",
+      ariaMoveUp: "Move up",
+      ariaMoveDown: "Move down",
+      ariaMoveLeft: "Move left",
+      ariaMoveRight: "Move right",
+      ariaClose: "Close",
+      ariaDpad: "Direction controls",
+      ariaBoosts: "Boosts for next run",
+      ariaShrinkPotion: "Use shrink potion",
+      ariaSourceFiles: "Source files",
+    },
+    th: {
+      scoreNow: "ตอนนี้",
+      scoreBest: "สูงสุด",
+      scoreCoins: "เหรียญ",
+      coinsWord: "เหรียญ",
+      overlayTitleIdle: "หิวมั้ย?",
+      overlayTextIdle: "ลูกศร, WASD หรือปัดนิ้ว อย่าไปกัดตัวเองนะ",
+      overlayTextMobile: "ปัดบนกระดานหรือแตะลูกศร",
+      playGo: "ไปเลย",
+      auto: "ออโต้",
+      stop: "หยุด",
+      shop: "ร้านค้า",
+      shrink: "ย่อ",
+      shrinkCount: "ย่อ ({n})",
+      hint: "ลูกศร / wasd เลื้อย · เว้นวรรค หยุดชั่วคราว",
+      source: "</> โค้ด",
+      sourceTitle: "โค้ด",
+      copy: "คัดลอก",
+      buy: "ซื้อ",
+      owned: "มี: {n}",
+      again: "อีกครั้ง",
+      back: "กลับ",
+      overlayAiRun: "เล่นออโต้.",
+      overlayAiRunText: "{score} แบบออโต้ — ไม่นับเป็นสูงสุด",
+      overlayNewBest: "สูงสุดใหม่!",
+      overlayNewBestText: "{score} — ไปต่อเลย",
+      overlayOuch: "โอ๊ย.",
+      overlayOuchText: "ครั้งนี้ {score} สูงสุดคือ {best}",
+      overlayStuffed: "อิ่มแล้ว.",
+      overlayStuffedAi: "Mumu เล่นเอง คะแนนไม่บันทึก",
+      overlayStuffedWin: "เต็มกระดาน {score} คะแนน",
+      overlayPause: "เดี๋ยวก่อน.",
+      overlayPauseText: "Mumu รออยู่",
+      shop_slow_start_name: "สโลว์โม",
+      shop_slow_start_desc: "งูเคลื่อนช้าลง 35% ต่อรอบ",
+      shop_revive_name: "ชีวิตพิเศษ",
+      shop_revive_desc: "ฟื้นคืนชีพได้ครั้งเดียวหลังชน",
+      shop_shrink_name: "ยาเล็ก",
+      shop_shrink_desc: "ลดความยาวงูครึ่งหนึ่งระหว่างเล่น (กด X)",
+      shop_score_boost_name: "คะแนน x2",
+      shop_score_boost_desc: "แอปเปิ้ลได้คะแนนสองเท่าต่อรอบ",
+      shop_magnet_name: "แม่เหล็กดูดเหรียญ",
+      shop_magnet_desc: "เหรียญโผล่บ่อยขึ้นต่อรอบ",
+      shop_ghost_walls_name: "กำแพงผี",
+      shop_ghost_walls_desc: "ทะลุกำแพงได้ต่อรอบ",
+      shop_more_apples_name: "แอปเปิ้ลเพิ่ม",
+      shop_more_apples_desc: "มี 5 แอปเปิ้ลบนกระดานต่อรอบ",
+      boost_slow_start: "สโลว์โม",
+      boost_revive: "ชีวิตพิเศษ",
+      boost_shrink: "ย่อ",
+      boost_score_boost: "x2",
+      boost_magnet: "แม่เหล็ก",
+      boost_ghost_walls: "กำแพงผี",
+      boost_more_apples: "แอปเปิ้ล+",
+      ariaThemeDark: "เปลี่ยนเป็นโหมดมืด",
+      ariaThemeLight: "เปลี่ยนเป็นโหมดสว่าง",
+      ariaLangTh: "เปลี่ยนเป็นภาษาไทย",
+      ariaLangEn: "Switch to English",
+      ariaPause: "หยุดชั่วคราว",
+      ariaResume: "เล่นต่อ",
+      ariaMoveUp: "เลื่อนขึ้น",
+      ariaMoveDown: "เลื่อนลง",
+      ariaMoveLeft: "เลื่อนซ้าย",
+      ariaMoveRight: "เลื่อนขวา",
+      ariaClose: "ปิด",
+      ariaDpad: "ปุ่มควบคุมทิศทาง",
+      ariaBoosts: "บูสต์สำหรับรอบถัดไป",
+      ariaShrinkPotion: "ใช้ยาเล็ก",
+      ariaSourceFiles: "ไฟล์โค้ด",
+    },
+  };
+
+  let currentLang = "en";
+  let overlayState = null;
+  let idleOverlayMobile = false;
+
+  function detectLang() {
+    try {
+      const saved = localStorage.getItem(LANG_KEY);
+      if (saved === "th" || saved === "en") return saved;
+    } catch (e) {}
+    return navigator.language &&
+      navigator.language.toLowerCase().startsWith("th")
+      ? "th"
+      : "en";
+  }
+
+  function t(key, vars = {}) {
+    let str = I18N[currentLang][key] ?? I18N.en[key] ?? key;
+    for (const [k, v] of Object.entries(vars)) {
+      str = str.replaceAll(`{${k}}`, String(v));
+    }
+    return str;
+  }
+
+  function boostLabel(id) {
+    return t(`boost_${id}`);
+  }
+
+  function shopItemName(id) {
+    return t(`shop_${id}_name`);
+  }
+
+  function shopItemDesc(id) {
+    return t(`shop_${id}_desc`);
+  }
+
+  function idleOverlayKeys() {
+    return {
+      titleKey: "overlayTitleIdle",
+      textKey: idleOverlayMobile ? "overlayTextMobile" : "overlayTextIdle",
+      btnKey: "playGo",
+    };
+  }
+
+  function refreshOverlay() {
+    if (!overlayState) return;
+    overlayTitle.textContent = t(overlayState.titleKey, overlayState.vars);
+    overlayText.textContent = t(overlayState.textKey, overlayState.vars);
+    playBtn.textContent = t(overlayState.btnKey);
+  }
+
+  function applyStaticI18n() {
+    document.querySelectorAll("[data-i18n]").forEach((el) => {
+      el.textContent = t(el.dataset.i18n);
+    });
+  }
+
+  function applyAriaI18n() {
+    const dark = currentTheme() === "dark";
+    themeBtn.setAttribute(
+      "aria-label",
+      t(dark ? "ariaThemeLight" : "ariaThemeDark"),
+    );
+    langBtn.setAttribute(
+      "aria-label",
+      t(currentLang === "en" ? "ariaLangTh" : "ariaLangEn"),
+    );
+    langBtn.textContent = currentLang === "en" ? "ไทย" : "EN";
+    pauseBtn.setAttribute(
+      "aria-label",
+      t(state === "paused" ? "ariaResume" : "ariaPause"),
+    );
+    shrinkBtn.setAttribute("aria-label", t("ariaShrinkPotion"));
+    document.getElementById("dpad").setAttribute("aria-label", t("ariaDpad"));
+    boostBadgesEl.setAttribute("aria-label", t("ariaBoosts"));
+    shopCloseBtn.setAttribute("aria-label", t("ariaClose"));
+    document
+      .getElementById("source-close-btn")
+      .setAttribute("aria-label", t("ariaClose"));
+    document
+      .querySelector(".source-tabs")
+      .setAttribute("aria-label", t("ariaSourceFiles"));
+    const dirLabels = {
+      up: "ariaMoveUp",
+      down: "ariaMoveDown",
+      left: "ariaMoveLeft",
+      right: "ariaMoveRight",
+    };
+    document.querySelectorAll(".dpad-btn[data-dir]").forEach((btn) => {
+      btn.setAttribute("aria-label", t(dirLabels[btn.dataset.dir]));
+    });
+  }
+
+  function applyLanguage(lang) {
+    currentLang = lang === "th" ? "th" : "en";
+    document.documentElement.lang = currentLang;
+    document.documentElement.dataset.lang = currentLang;
+    applyStaticI18n();
+    applyAriaI18n();
+    setAutoPlay(autoPlayEnabled);
+    updateShrinkBtn();
+    updateBoostBadges();
+    if (!shopModal.hidden) renderShop();
+    if (overlay.classList.contains("visible")) refreshOverlay();
+    else if (state === "idle") {
+      overlayState = idleOverlayKeys();
+      refreshOverlay();
+    }
+  }
+
+  // --- Tamper-resistant storage ---
+
+  const WALLET_SALT = "mumu-snake-v1";
+  const COINS_KEY = "mumu-coins";
+  const INVENTORY_KEY = "mumu-inventory";
+
+  function hashValue(str) {
+    let h = 5381;
+    for (let i = 0; i < str.length; i++) {
+      h = ((h << 5) + h) ^ str.charCodeAt(i);
+    }
+    return (h >>> 0).toString(36);
+  }
+
+  function saveSecure(key, value) {
+    const payload = { v: value, h: hashValue(`${WALLET_SALT}:${value}`) };
+    localStorage.setItem(key, btoa(JSON.stringify(payload)));
+  }
+
+  function loadSecure(key, defaultVal = 0) {
+    try {
+      const raw = localStorage.getItem(key);
+      if (!raw) return defaultVal;
+      const payload = JSON.parse(atob(raw));
+      if (!payload || payload.h !== hashValue(`${WALLET_SALT}:${payload.v}`)) {
+        return defaultVal;
+      }
+      const n = Number(payload.v);
+      return Number.isFinite(n) && n >= 0 ? n : defaultVal;
+    } catch {
+      return defaultVal;
+    }
+  }
+
+  function saveSecureObject(key, obj) {
+    const json = JSON.stringify(obj);
+    const payload = { v: btoa(json), h: hashValue(`${WALLET_SALT}:${json}`) };
+    localStorage.setItem(key, btoa(JSON.stringify(payload)));
+  }
+
+  function loadSecureObject(key, defaultObj) {
+    try {
+      const raw = localStorage.getItem(key);
+      if (!raw) return { ...defaultObj };
+      const payload = JSON.parse(atob(raw));
+      const json = atob(payload.v);
+      if (payload.h !== hashValue(`${WALLET_SALT}:${json}`)) {
+        return { ...defaultObj };
+      }
+      return { ...defaultObj, ...JSON.parse(json) };
+    } catch {
+      return { ...defaultObj };
+    }
+  }
+
+  const DEFAULT_INVENTORY = {
+    slow_start: 0,
+    revive: 0,
+    shrink: 0,
+    score_boost: 0,
+    magnet: 0,
+    ghost_walls: 0,
+    more_apples: 0,
+  };
+
+  const SHOP_ITEMS = [
+    { id: "slow_start", price: 20 },
+    { id: "revive", price: 35 },
+    { id: "shrink", price: 25 },
+    { id: "score_boost", price: 30 },
+    { id: "magnet", price: 18 },
+    { id: "ghost_walls", price: 45 },
+    { id: "more_apples", price: 22 },
+  ];
+
+  let coins = loadSecure(COINS_KEY, 0);
+  let inventory = loadSecureObject(INVENTORY_KEY, DEFAULT_INVENTORY);
+
+  function saveCoins() {
+    saveSecure(COINS_KEY, coins);
+    updateCoinUI();
+  }
+
+  function saveInventory() {
+    saveSecureObject(INVENTORY_KEY, inventory);
+    updateBoostBadges();
+    updateShrinkBtn();
+    renderShop();
+  }
+
+  function addCoins(n) {
+    coins += n;
+    saveCoins();
+  }
+
+  function updateCoinUI() {
+    coinBalanceEl.textContent = coins;
+    if (shopCoinBalanceEl) shopCoinBalanceEl.textContent = coins;
+  }
+
+  // --- Game state ---
+
+  let snake,
+    dir,
+    dirQueue,
+    foods,
+    coin,
+    coinNextSpawnAt,
+    score,
+    tickMs,
+    state,
+    lastTick,
+    aiAssisted,
+    run;
   let highScore = Number(localStorage.getItem("snake-high-score")) || 0;
   highScoreEl.textContent = highScore;
+  updateCoinUI();
+
+  function defaultRun() {
+    return {
+      speedFactor: 1,
+      revives: 0,
+      scorePerApple: 1,
+      coinBoost: false,
+      ghostWalls: false,
+      appleTarget: DEFAULT_APPLE_TARGET,
+    };
+  }
+
+  function occupiedCells() {
+    const set = new Set();
+    for (const s of snake) set.add(`${s.x},${s.y}`);
+    for (const f of foods) set.add(`${f.x},${f.y}`);
+    if (coin) set.add(`${coin.x},${coin.y}`);
+    return set;
+  }
+
+  function freeCells() {
+    const occ = occupiedCells();
+    const free = [];
+    for (let y = 0; y < GRID; y++) {
+      for (let x = 0; x < GRID; x++) {
+        if (!occ.has(`${x},${y}`)) free.push({ x, y });
+      }
+    }
+    return free;
+  }
+
+  function spawnApples() {
+    const target = run ? run.appleTarget : DEFAULT_APPLE_TARGET;
+    const free = freeCells();
+    while (foods.length < target && free.length) {
+      const idx = Math.floor(Math.random() * free.length);
+      foods.push(free.splice(idx, 1)[0]);
+    }
+  }
+
+  function scheduleNextCoin(fromTime) {
+    const min = run.coinBoost ? 5000 : 10000;
+    const max = run.coinBoost ? 8000 : 16000;
+    coinNextSpawnAt = fromTime + min + Math.random() * (max - min);
+  }
+
+  function spawnCoin() {
+    const free = freeCells();
+    if (!free.length) {
+      scheduleNextCoin(performance.now());
+      return;
+    }
+    const cell = free[Math.floor(Math.random() * free.length)];
+    const now = performance.now();
+    const lifetime = run.coinBoost ? 9000 : 6000;
+    coin = {
+      x: cell.x,
+      y: cell.y,
+      spawnAt: now,
+      expiresAt: now + lifetime,
+    };
+  }
+
+  function updateCoinTimers(time) {
+    if (state !== "playing" || aiAssisted) return;
+    if (coin) {
+      if (time >= coin.expiresAt) {
+        coin = null;
+        scheduleNextCoin(time);
+      }
+    } else if (coinNextSpawnAt && time >= coinNextSpawnAt) {
+      spawnCoin();
+      coinNextSpawnAt = null;
+    }
+  }
+
+  function applyRunBoosts() {
+    run = defaultRun();
+    if (aiAssisted) return;
+
+    const consume = (key, apply) => {
+      if (inventory[key] > 0) {
+        inventory[key]--;
+        apply();
+      }
+    };
+
+    consume("slow_start", () => {
+      run.speedFactor = 0.65;
+    });
+    consume("revive", () => {
+      run.revives = 1;
+    });
+    consume("score_boost", () => {
+      run.scorePerApple = 2;
+    });
+    consume("magnet", () => {
+      run.coinBoost = true;
+    });
+    consume("ghost_walls", () => {
+      run.ghostWalls = true;
+    });
+    consume("more_apples", () => {
+      run.appleTarget = 5;
+    });
+
+    saveInventory();
+  }
+
+  function computeTickMs() {
+    const base = Math.max(MIN_TICK_MS, BASE_TICK_MS - score * SPEEDUP_PER_FOOD);
+    return base / run.speedFactor;
+  }
 
   function reset() {
     const mid = Math.floor(GRID / 2);
@@ -59,27 +549,43 @@
     dir = DIRS.right;
     dirQueue = [];
     score = 0;
-    tickMs = BASE_TICK_MS;
-    aiAssisted = false;
+    foods = [];
+    coin = null;
+    coinNextSpawnAt = null;
     scoreEl.textContent = "0";
-    placeFood();
+    tickMs = computeTickMs();
+    spawnApples();
   }
 
-  function placeFood() {
-    const free = [];
-    for (let y = 0; y < GRID; y++) {
-      for (let x = 0; x < GRID; x++) {
-        if (!snake.some((s) => s.x === x && s.y === y)) free.push({ x, y });
-      }
+  function reviveSnake() {
+    const mid = Math.floor(GRID / 2);
+    snake = [
+      { x: mid, y: mid },
+      { x: mid - 1, y: mid },
+      { x: mid - 2, y: mid },
+    ];
+    dir = DIRS.right;
+    dirQueue = [];
+    spawnApples();
+    if (coin) {
+      const occ = occupiedCells();
+      if (occ.has(`${coin.x},${coin.y}`)) coin = null;
     }
-    food = free[Math.floor(Math.random() * free.length)];
+  }
+
+  function useShrink() {
+    if (state !== "playing" || aiAssisted || inventory.shrink <= 0) return;
+    if (snake.length <= 3) return;
+    const newLen = Math.max(3, Math.floor(snake.length / 2));
+    snake = snake.slice(0, newLen);
+    inventory.shrink--;
+    saveInventory();
   }
 
   function setDirection(name) {
     const next = DIRS[name];
     if (!next) return;
     const last = dirQueue.length ? dirQueue[dirQueue.length - 1] : dir;
-    // Ignore reversals and duplicates.
     if (next.x === -last.x && next.y === -last.y) return;
     if (next.x === last.x && next.y === last.y) return;
     if (dirQueue.length < 3) dirQueue.push(next);
@@ -90,27 +596,55 @@
 
     const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
 
+    if (run.ghostWalls) {
+      if (head.x < 0) head.x = GRID - 1;
+      else if (head.x >= GRID) head.x = 0;
+      if (head.y < 0) head.y = GRID - 1;
+      else if (head.y >= GRID) head.y = 0;
+    }
+
     const hitWall =
-      head.x < 0 || head.y < 0 || head.x >= GRID || head.y >= GRID;
+      !run.ghostWalls &&
+      (head.x < 0 || head.y < 0 || head.x >= GRID || head.y >= GRID);
     const hitSelf = snake.some(
       (s, i) => i < snake.length - 1 && s.x === head.x && s.y === head.y,
     );
     if (hitWall || hitSelf) {
+      if (run.revives > 0 && !aiAssisted) {
+        run.revives--;
+        reviveSnake();
+        return;
+      }
       gameOver();
       return;
     }
 
     snake.unshift(head);
 
-    if (head.x === food.x && head.y === food.y) {
-      score++;
-      scoreEl.textContent = score;
-      tickMs = Math.max(MIN_TICK_MS, BASE_TICK_MS - score * SPEEDUP_PER_FOOD);
+    let ate = false;
+    for (let i = 0; i < foods.length; i++) {
+      if (head.x === foods[i].x && head.y === foods[i].y) {
+        foods.splice(i, 1);
+        score += run.scorePerApple;
+        scoreEl.textContent = score;
+        tickMs = computeTickMs();
+        ate = true;
+        break;
+      }
+    }
+
+    if (coin && head.x === coin.x && head.y === coin.y) {
+      if (!aiAssisted) addCoins(1);
+      coin = null;
+      scheduleNextCoin(performance.now());
+    }
+
+    if (ate) {
       if (snake.length === GRID * GRID) {
         win();
         return;
       }
-      placeFood();
+      spawnApples();
     } else {
       snake.pop();
     }
@@ -130,6 +664,8 @@
       apple: read("--apple"),
       snakeLine: read("--snake-line"),
       foodStem: read("--food-stem"),
+      coin: read("--coin"),
+      coinShine: read("--coin-shine"),
     };
   }
 
@@ -143,7 +679,7 @@
     themeBtn.setAttribute("aria-pressed", String(dark));
     themeBtn.setAttribute(
       "aria-label",
-      dark ? "Switch to light mode" : "Switch to dark mode",
+      t(dark ? "ariaThemeLight" : "ariaThemeDark"),
     );
     refreshPalette();
     if (snake) render(performance.now());
@@ -160,9 +696,9 @@
     }
   }
 
-  function drawFood(time) {
-    const cx = (food.x + 0.5) * CELL;
-    const cy = (food.y + 0.5) * CELL;
+  function drawApple(cell, time) {
+    const cx = (cell.x + 0.5) * CELL;
+    const cy = (cell.y + 0.5) * CELL;
     const pulse = 1 + 0.05 * Math.sin(time / 280);
     const r = CELL * 0.3 * pulse;
 
@@ -186,6 +722,35 @@
       Math.PI * 2,
     );
     ctx.fill();
+  }
+
+  function drawCoin(time) {
+    if (!coin) return;
+    const remaining = coin.expiresAt - time;
+    if (remaining <= 2000 && Math.floor(time / 120) % 2 === 0) return;
+
+    const cx = (coin.x + 0.5) * CELL;
+    const cy = (coin.y + 0.5) * CELL;
+    const pulse = 1 + 0.06 * Math.sin(time / 200);
+    const r = CELL * 0.26 * pulse;
+
+    ctx.beginPath();
+    ctx.fillStyle = palette.coin;
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.lineWidth = Math.max(1.2, CELL * 0.05);
+    ctx.strokeStyle = palette.snakeLine;
+    ctx.stroke();
+
+    ctx.fillStyle = palette.coinShine;
+    ctx.beginPath();
+    ctx.arc(cx - r * 0.25, cy - r * 0.25, r * 0.35, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  function drawFoods(time) {
+    for (const f of foods) drawApple(f, time);
+    drawCoin(time);
   }
 
   function segmentColor(i, total) {
@@ -215,7 +780,6 @@
     drawBody(CELL * 0.1, () => palette.snakeLine);
     drawBody(0, (i) => segmentColor(i, snake.length));
 
-    // Head: the face image, rotated so its top points where the snake travels.
     const head = snake[0];
     const cx = (head.x + 0.5) * CELL;
     const cy = (head.y + 0.5) * CELL;
@@ -241,7 +805,7 @@
 
   function render(time) {
     drawBoard();
-    drawFood(time);
+    drawFoods(time);
     drawSnake();
   }
 
@@ -249,6 +813,7 @@
 
   function loop(time) {
     if (state === "playing") {
+      updateCoinTimers(time);
       if (time - lastTick >= tickMs) {
         lastTick = time;
         if (autoPlayEnabled) {
@@ -264,21 +829,26 @@
 
   function setPausedChrome(paused) {
     pauseBtn.classList.toggle("is-paused", paused);
-    pauseBtn.setAttribute("aria-label", paused ? "Resume" : "Pause");
+    pauseBtn.setAttribute("aria-label", t(paused ? "ariaResume" : "ariaPause"));
   }
 
-  function start() {
+  function start(manual = true) {
+    aiAssisted = !manual;
     reset();
+    if (manual) applyRunBoosts();
+    else run = defaultRun();
     state = "playing";
     lastTick = performance.now();
+    scheduleNextCoin(lastTick);
     setPausedChrome(false);
+    overlayState = null;
     overlay.classList.remove("visible");
+    updateShrinkBtn();
   }
 
-  function showOverlay(title, text, btnLabel) {
-    overlayTitle.textContent = title;
-    overlayText.textContent = text;
-    playBtn.textContent = btnLabel;
+  function showOverlay(titleKey, textKey, btnKey, vars = {}) {
+    overlayState = { titleKey, textKey, btnKey, vars };
+    refreshOverlay();
     overlay.classList.add("visible");
   }
 
@@ -286,63 +856,158 @@
     state = "over";
     setAutoPlay(false);
     setPausedChrome(false);
+    coin = null;
+    coinNextSpawnAt = null;
     if (aiAssisted) {
-      showOverlay(
-        "AI run.",
-        `${score} on autopilot — doesn't count toward Best.`,
-        "Again",
-      );
+      showOverlay("overlayAiRun", "overlayAiRunText", "again", { score });
     } else if (score > highScore) {
       highScore = score;
       localStorage.setItem("snake-high-score", highScore);
       highScoreEl.textContent = highScore;
-      showOverlay("New best.", `${score} — keep going.`, "Again");
+      showOverlay("overlayNewBest", "overlayNewBestText", "again", { score });
     } else {
-      showOverlay(
-        "Ouch.",
-        `${score} this time. Best is ${highScore}.`,
-        "Again",
-      );
+      showOverlay("overlayOuch", "overlayOuchText", "again", {
+        score,
+        best: highScore,
+      });
     }
+    updateShrinkBtn();
   }
 
   function win() {
     state = "over";
     setAutoPlay(false);
     setPausedChrome(false);
+    coin = null;
+    coinNextSpawnAt = null;
     if (!aiAssisted && score > highScore) {
       highScore = score;
       localStorage.setItem("snake-high-score", highScore);
       highScoreEl.textContent = highScore;
     }
     if (aiAssisted) {
-      showOverlay("Stuffed.", "Mumu played itself. Score not saved.", "Again");
+      showOverlay("overlayStuffed", "overlayStuffedAi", "again");
     } else {
-      showOverlay("Stuffed.", `The whole board. ${score} points.`, "Again");
+      showOverlay("overlayStuffed", "overlayStuffedWin", "again", { score });
     }
+    updateShrinkBtn();
   }
 
   function togglePause() {
     if (state === "playing") {
       state = "paused";
       setPausedChrome(true);
-      showOverlay("Hold on.", "Mumu is waiting.", "Back");
+      showOverlay("overlayPause", "overlayPauseText", "back");
     } else if (state === "paused") {
       state = "playing";
       setPausedChrome(false);
+      overlayState = null;
       lastTick = performance.now();
       overlay.classList.remove("visible");
     }
   }
+
+  // --- Shop UI ---
+
+  function updateBoostBadges() {
+    const runStartKeys = [
+      "slow_start",
+      "revive",
+      "score_boost",
+      "magnet",
+      "ghost_walls",
+      "more_apples",
+    ];
+    const badges = [];
+    for (const key of runStartKeys) {
+      const count = inventory[key];
+      if (count > 0) {
+        badges.push(
+          `<span class="boost-badge">${boostLabel(key)}${count > 1 ? ` ×${count}` : ""}</span>`,
+        );
+      }
+    }
+    if (inventory.shrink > 0) {
+      badges.push(
+        `<span class="boost-badge">${boostLabel("shrink")}${inventory.shrink > 1 ? ` ×${inventory.shrink}` : ""}</span>`,
+      );
+    }
+    boostBadgesEl.innerHTML = badges.join("");
+    boostBadgesEl.hidden = badges.length === 0;
+  }
+
+  function updateShrinkBtn() {
+    const show = inventory.shrink > 0 && state === "playing" && !aiAssisted;
+    shrinkBtn.hidden = !show;
+    shrinkBtn.textContent =
+      inventory.shrink > 1
+        ? t("shrinkCount", { n: inventory.shrink })
+        : t("shrink");
+  }
+
+  function renderShop() {
+    shopItemsEl.innerHTML = SHOP_ITEMS.map((item) => {
+      const owned = inventory[item.id];
+      const canBuy = coins >= item.price;
+      return `<div class="shop-item">
+        <div class="shop-item-info">
+          <div class="shop-item-name">${shopItemName(item.id)} — ${item.price} ${t("coinsWord")}</div>
+          <div class="shop-item-desc">${shopItemDesc(item.id)}</div>
+          ${owned > 0 ? `<div class="shop-item-owned">${t("owned", { n: owned })}</div>` : ""}
+        </div>
+        <button class="shop-buy-btn" data-item="${item.id}" ${canBuy ? "" : "disabled"}>${t("buy")}</button>
+      </div>`;
+    }).join("");
+
+    shopItemsEl.querySelectorAll(".shop-buy-btn").forEach((btn) => {
+      btn.addEventListener("click", () => buyItem(btn.dataset.item));
+    });
+  }
+
+  function buyItem(id) {
+    const item = SHOP_ITEMS.find((i) => i.id === id);
+    if (!item || coins < item.price) return;
+    coins -= item.price;
+    inventory[id]++;
+    saveCoins();
+    saveInventory();
+  }
+
+  let pausedForShop = false;
+
+  function openShop() {
+    renderShop();
+    shopModal.hidden = false;
+    document.body.classList.add("shop-open");
+    if (state === "playing") {
+      state = "paused";
+      pausedForShop = true;
+      setPausedChrome(true);
+      overlay.classList.remove("visible");
+    }
+  }
+
+  function closeShop() {
+    shopModal.hidden = true;
+    document.body.classList.remove("shop-open");
+    if (pausedForShop && state === "paused") {
+      state = "playing";
+      setPausedChrome(false);
+      lastTick = performance.now();
+      pausedForShop = false;
+    }
+  }
+
+  shopBtn.addEventListener("click", openShop);
+  shopCloseBtn.addEventListener("click", closeShop);
+  shopBackdrop.addEventListener("click", closeShop);
+  shrinkBtn.addEventListener("click", useShrink);
 
   // --- Auto-play AI ---
 
   let autoPlayEnabled = false;
   const autoPlayBtn = document.getElementById("auto-play-btn");
 
-  // Precomputed Hamiltonian cycle: columns 1..GRID-1 serpentine through the
-  // rows, column 0 is the return path back to the start. Works because GRID
-  // is even, so following the cycle visits every cell and never dies.
   const CELLS = GRID * GRID;
   const cycleIndex = [];
   const cellAtCycle = new Array(CELLS);
@@ -372,8 +1037,6 @@
     return cellAtCycle[(cycleIndex[y][x] + 1) % CELLS];
   }
 
-  // A cell the head can move into right now (same rule as step(): the tail
-  // cell is free because it vacates on the same tick).
   function isSafeCell(cell, body) {
     if (cell.x < 0 || cell.y < 0 || cell.x >= GRID || cell.y >= GRID) {
       return false;
@@ -390,10 +1053,6 @@
     return "up";
   }
 
-  // The guaranteed strategy below relies on the body lying in cycle order
-  // (strictly increasing cycle distance from tail to head). That always holds
-  // when auto play drives from the start, but not when the player steered
-  // manually and then handed control over mid-game.
   function isOrderedBody(body) {
     const tail = body[body.length - 1];
     const tailIdx = cycleIndex[tail.y][tail.x];
@@ -406,14 +1065,12 @@
     return true;
   }
 
-  // Body after the head moves into `cell` (growing if it eats there).
   function bodyAdvance(body, cell, eats) {
     const next = [cell, ...body];
     if (!eats) next.pop();
     return next;
   }
 
-  // Free-cell flood-fill size from `cell` (tail counts as free).
   function floodSize(cell, body) {
     const blocked = new Uint8Array(CELLS);
     for (let i = 0; i < body.length - 1; i++) {
@@ -439,10 +1096,6 @@
     return queue.length;
   }
 
-  // Time-aware survivability probe: after moving the head to `cell`, run a
-  // BFS where a body cell only blocks the search until the tail has retreated
-  // past it. Reports whether the tail is chasable (long-term survival) and
-  // how many ticks of movement are reachable at all (short-term survival).
   function chaseProbe(cell, body0, foodCell) {
     const eats = foodCell && cell.x === foodCell.x && cell.y === foodCell.y;
     const body = bodyAdvance(body0, cell, eats);
@@ -484,7 +1137,6 @@
     return { chasable, depth };
   }
 
-  // One-step heuristic score for a candidate head cell on a virtual body.
   function scoreCell(cell, body, foodCell) {
     const probe = chaseProbe(cell, body, foodCell);
     const head = body[0];
@@ -496,7 +1148,6 @@
       : probe.depth * 1000 + floodSize(cell, body);
   }
 
-  // The heuristic policy: best-scoring safe cell for a virtual body.
   function policyCell(body, foodCell) {
     const head = body[0];
     let best = null;
@@ -509,38 +1160,55 @@
     return best ? best.cell : null;
   }
 
-  // Deterministically play the heuristic policy forward from a first move.
-  // Success means the body fell back into cycle order (the guaranteed
-  // strategy takes over from there) or it survived a full board's worth of
-  // ticks. Because the policy is deterministic, a surviving rollout is the
-  // trajectory the real game will actually follow.
+  function pickTargetFood(body) {
+    if (!foods.length) return null;
+    const tail = body[body.length - 1];
+    const tailIdx = cycleIndex[tail.y][tail.x];
+    const rel = (cell) =>
+      (cycleIndex[cell.y][cell.x] - tailIdx + CELLS) % CELLS;
+    const relHead = rel(body[0]);
+    let best = null;
+    let bestRel = Infinity;
+    for (const f of foods) {
+      const r = rel(f);
+      if (r > relHead && r < bestRel) {
+        bestRel = r;
+        best = f;
+      }
+    }
+    return best || foods[0];
+  }
+
   function rollout(firstCell) {
-    let foodCell = food;
-    let eats = firstCell.x === foodCell.x && firstCell.y === foodCell.y;
+    let foodCell = pickTargetFood(snake);
+    let eats =
+      foodCell && firstCell.x === foodCell.x && firstCell.y === foodCell.y;
     let body = bodyAdvance(snake, firstCell, eats);
-    if (eats) foodCell = null;
+    if (eats) foodCell = pickTargetFood(body);
     for (let s = 0; s < CELLS; s++) {
       if (isOrderedBody(body)) return { ok: true, steps: s };
       const cell = policyCell(body, foodCell);
       if (!cell) return { ok: false, steps: s };
       eats = foodCell && cell.x === foodCell.x && cell.y === foodCell.y;
       body = bodyAdvance(body, cell, eats);
-      if (eats) foodCell = null;
+      if (eats) foodCell = pickTargetFood(body);
     }
     return { ok: true, steps: CELLS };
   }
 
-  // Recovery mode for an unordered body: pick the first move whose rollout
-  // provably survives until the body is cycle-ordered again. If every rollout
-  // dies, take the one that survives longest.
   function recoveryDirection() {
     const head = snake[0];
+    const target = pickTargetFood(snake);
     const candidates = [];
     for (const name of Object.keys(DIRS)) {
       const d = DIRS[name];
       const cell = { x: head.x + d.x, y: head.y + d.y };
       if (!isSafeCell(cell, snake)) continue;
-      candidates.push({ name, cell, score: scoreCell(cell, snake, food) });
+      candidates.push({
+        name,
+        cell,
+        score: scoreCell(cell, snake, target),
+      });
     }
     candidates.sort((a, b) => b.score - a.score);
 
@@ -555,11 +1223,6 @@
     return fallback ? fallback.name : null;
   }
 
-  // Strategy: follow the Hamiltonian cycle, but take shortcuts forward along
-  // it when the food lies ahead. Measuring every cell by its cycle distance
-  // from the tail, the body is always strictly ordered tail -> head; a move
-  // is safe iff it lands strictly ahead of the head without passing the tail.
-  // That invariant makes collisions impossible, so the snake always wins.
   function getAutoDirection() {
     if (!isOrderedBody(snake)) return recoveryDirection();
 
@@ -570,9 +1233,9 @@
       (cycleIndex[cell.y][cell.x] - tailIdx + CELLS) % CELLS;
 
     const relHead = rel(head);
-    const relFood = rel(food);
+    const target = pickTargetFood(snake);
+    const relFood = rel(target);
 
-    // Shortcut: biggest forward jump that doesn't overshoot the food.
     if (relFood > relHead) {
       let best = null;
       let bestRel = relHead;
@@ -590,8 +1253,6 @@
       if (best) return dirName(best.x - head.x, best.y - head.y);
     }
 
-    // Otherwise follow the cycle. The next cell is always free or the tail
-    // (which vacates this tick), so this can only fail right at the win.
     const nc = nextCycleCell(head.x, head.y);
     if (isSafeCell(nc, snake)) {
       return dirName(nc.x - head.x, nc.y - head.y);
@@ -606,12 +1267,10 @@
 
   function setAutoPlay(on) {
     autoPlayEnabled = on;
-    autoPlayBtn.textContent = on ? "Stop" : "Auto";
+    autoPlayBtn.textContent = t(on ? "stop" : "auto");
     autoPlayBtn.setAttribute("aria-pressed", String(on));
-    if (on) {
-      aiAssisted = true;
-      dirQueue = [];
-    }
+    if (on) dirQueue = [];
+    updateShrinkBtn();
   }
 
   autoPlayBtn.addEventListener("click", () => {
@@ -619,8 +1278,9 @@
       setAutoPlay(false);
       return;
     }
-    if (state === "idle" || state === "over") start();
+    if (state === "idle" || state === "over") start(false);
     else if (state === "paused") togglePause();
+    else aiAssisted = true;
     setAutoPlay(true);
   });
 
@@ -649,12 +1309,20 @@
       }
       return;
     }
-    if (e.key === " ") {
+    if (e.key === " " || e.key === "Spacebar") {
       e.preventDefault();
       if (state === "playing" || state === "paused") togglePause();
       else start();
     } else if (e.key === "Enter" && state !== "playing") {
       start();
+    } else if (
+      (e.key === "x" || e.key === "X") &&
+      state === "playing" &&
+      !autoPlayEnabled
+    ) {
+      useShrink();
+    } else if (e.key === "Escape" && !shopModal.hidden) {
+      closeShop();
     }
   });
 
@@ -682,7 +1350,6 @@
     { passive: false },
   );
 
-  // On-screen d-pad (visible on touch devices).
   document.querySelectorAll(".dpad-btn[data-dir]").forEach((btn) => {
     btn.addEventListener("pointerdown", (e) => {
       e.preventDefault();
@@ -700,6 +1367,14 @@
   playBtn.addEventListener("click", start);
 
   applyTheme(currentTheme());
+
+  langBtn.addEventListener("click", () => {
+    const next = currentLang === "en" ? "th" : "en";
+    try {
+      localStorage.setItem(LANG_KEY, next);
+    } catch (e) {}
+    applyLanguage(next);
+  });
 
   themeBtn.addEventListener("click", () => {
     const next = currentTheme() === "dark" ? "light" : "dark";
@@ -719,10 +1394,9 @@
     });
 
   if (window.matchMedia("(pointer: coarse)").matches) {
-    overlayText.textContent = "Swipe the board or tap the arrows.";
+    idleOverlayMobile = true;
   }
 
-  // Pause/resume hooks for the source viewer modal.
   window.pauseForSource = () => {
     if (state === "playing") {
       state = "paused";
@@ -741,9 +1415,16 @@
     }
   };
 
-  // Initial idle render behind the start overlay.
+  run = defaultRun();
+  foods = [];
   reset();
   state = "idle";
+  currentLang =
+    document.documentElement.dataset.lang === "th" ? "th" : detectLang();
+  overlayState = idleOverlayKeys();
+  applyLanguage(currentLang);
+  updateBoostBadges();
+  updateShrinkBtn();
   faceImg.onload = () => render(performance.now());
   render(performance.now());
   requestAnimationFrame(loop);

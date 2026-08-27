@@ -17,6 +17,19 @@
             theme = "dark";
         } catch (e) {}
         document.documentElement.dataset.theme = theme;
+
+        var lang = "en";
+        try {
+          var savedLang = localStorage.getItem("mumu-lang");
+          if (savedLang === "th" || savedLang === "en") lang = savedLang;
+          else if (
+            navigator.language &&
+            navigator.language.toLowerCase().startsWith("th")
+          )
+            lang = "th";
+        } catch (e) {}
+        document.documentElement.lang = lang;
+        document.documentElement.dataset.lang = lang;
       })();
     </script>
     <link rel="icon" type="image/png" href="assets/snake-face.png" />
@@ -32,14 +45,26 @@
         <div class="header-tools">
           <div class="scores">
             <div class="score-card">
-              <span class="score-label">now</span>
+              <span class="score-label" data-i18n="scoreNow">now</span>
               <span class="score-value" id="score">0</span>
             </div>
             <div class="score-card">
-              <span class="score-label">best</span>
+              <span class="score-label" data-i18n="scoreBest">best</span>
               <span class="score-value" id="high-score">0</span>
             </div>
+            <div class="score-card score-card-coins">
+              <span class="score-label" data-i18n="scoreCoins">coins</span>
+              <span class="score-value" id="coin-balance">0</span>
+            </div>
           </div>
+          <button
+            id="lang-btn"
+            class="lang-btn"
+            type="button"
+            aria-label="Switch to Thai"
+          >
+            ไทย
+          </button>
           <button
             id="theme-btn"
             class="theme-btn"
@@ -47,12 +72,20 @@
             aria-pressed="false"
             aria-label="Switch to dark mode"
           >
-            <svg class="theme-icon icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+            <svg
+              class="theme-icon icon-moon"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
               <path
                 d="M15.4 3.6a8.2 8.2 0 1 0 5 14.4 7.1 7.1 0 0 1-9.6-9.4 8 8 0 0 0 4.6-5Z"
               />
             </svg>
-            <svg class="theme-icon icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+            <svg
+              class="theme-icon icon-sun"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
               <circle cx="12" cy="12" r="4.1" />
               <path
                 d="M12 2.8v2.3M12 18.9v2.3M2.8 12h2.3M18.9 12h2.3M5.2 5.2l1.6 1.6M17.2 17.2l1.6 1.6M5.2 18.8l1.6-1.6M17.2 6.8l1.6-1.6"
@@ -129,26 +162,79 @@
         </button>
       </div>
 
-      <button
-        id="auto-play-btn"
-        class="auto-play-btn"
-        type="button"
-        aria-pressed="false"
-      >
-        Auto
-      </button>
+      <div
+        class="boost-badges"
+        id="boost-badges"
+        hidden
+        aria-label="Boosts for next run"
+      ></div>
 
-      <p class="hint">arrows / wasd to slither &middot; space to pause</p>
+      <div class="action-row">
+        <button
+          id="auto-play-btn"
+          class="auto-play-btn"
+          type="button"
+          aria-pressed="false"
+        >
+          Auto
+        </button>
+        <button id="shop-btn" class="shop-btn" type="button" data-i18n="shop">
+          Shop
+        </button>
+        <button
+          id="shrink-btn"
+          class="shrink-btn"
+          type="button"
+          hidden
+          aria-label="Use shrink potion"
+        >
+          Shrink
+        </button>
+      </div>
+
+      <p class="hint" data-i18n="hint">
+        arrows / wasd to slither &middot; space to pause
+      </p>
 
       <button
         id="source-btn"
         class="source-btn"
         type="button"
         aria-haspopup="dialog"
+        data-i18n="source"
       >
         &lt;/&gt; source
       </button>
     </main>
+
+    <div class="shop-modal" id="shop-modal" hidden>
+      <div class="source-backdrop" id="shop-backdrop"></div>
+      <div
+        class="source-panel shop-panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="shop-title"
+      >
+        <header class="source-header">
+          <h2 id="shop-title" class="source-title" data-i18n="shop">Shop</h2>
+          <div class="source-actions">
+            <span class="shop-balance"
+              ><span id="shop-coin-balance">0</span>
+              <span data-i18n="coinsWord">coins</span></span
+            >
+            <button
+              id="shop-close-btn"
+              class="source-action-btn source-close-btn"
+              type="button"
+              aria-label="Close"
+            >
+              &times;
+            </button>
+          </div>
+        </header>
+        <div class="shop-body" id="shop-items"></div>
+      </div>
+    </div>
 
     <div class="source-modal" id="source-modal" hidden>
       <div class="source-backdrop" id="source-backdrop"></div>
@@ -159,12 +245,15 @@
         aria-labelledby="source-title"
       >
         <header class="source-header">
-          <h2 id="source-title" class="source-title">Source</h2>
+          <h2 id="source-title" class="source-title" data-i18n="sourceTitle">
+            Source
+          </h2>
           <div class="source-actions">
             <button
               id="source-copy-btn"
               class="source-action-btn"
               type="button"
+              data-i18n="copy"
             >
               Copy
             </button>
