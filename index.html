@@ -114,24 +114,27 @@
         </div>
       </div>
 
-      <div class="dpad" id="dpad" aria-label="Direction controls">
-        <button class="dpad-btn dpad-up" data-dir="up" aria-label="Move up">
-          <svg class="dpad-icon" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M12 6 20 18H4Z" />
+      <div class="swipe-pad" id="swipe-pad" aria-label="Swipe controls">
+        <div class="swipe-pad-surface" id="swipe-pad-surface">
+          <svg class="swipe-pad-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M12 4v4M12 16v4M4 12h4M16 12h4M7.05 7.05l2.83 2.83M14.12 14.12l2.83 2.83M7.05 16.95l2.83-2.83M14.12 9.88l2.83-2.83"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+            />
           </svg>
-        </button>
+          <span class="swipe-pad-label" data-i18n="swipePadLabel">Swipe</span>
+        </div>
         <button
-          class="dpad-btn dpad-left"
-          data-dir="left"
-          aria-label="Move left"
+          class="swipe-pad-pause"
+          id="pause-btn"
+          type="button"
+          aria-label="Pause"
         >
-          <svg class="dpad-icon" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M12 6 20 18H4Z" />
-          </svg>
-        </button>
-        <button class="dpad-btn dpad-pause" id="pause-btn" aria-label="Pause">
           <svg
-            class="dpad-icon icon-pause"
+            class="swipe-pad-pause-icon icon-pause"
             viewBox="0 0 24 24"
             aria-hidden="true"
           >
@@ -139,29 +142,11 @@
             <rect x="13.5" y="5" width="4.5" height="14" rx="1.2" />
           </svg>
           <svg
-            class="dpad-icon icon-play"
+            class="swipe-pad-pause-icon icon-play"
             viewBox="0 0 24 24"
             aria-hidden="true"
           >
             <path d="M8.2 5.6v12.8L19.2 12 8.2 5.6Z" />
-          </svg>
-        </button>
-        <button
-          class="dpad-btn dpad-right"
-          data-dir="right"
-          aria-label="Move right"
-        >
-          <svg class="dpad-icon" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M12 6 20 18H4Z" />
-          </svg>
-        </button>
-        <button
-          class="dpad-btn dpad-down"
-          data-dir="down"
-          aria-label="Move down"
-        >
-          <svg class="dpad-icon" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M12 6 20 18H4Z" />
           </svg>
         </button>
       </div>

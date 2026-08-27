@@ -323,7 +323,7 @@ body {
 .auto-play-btn,
 .shop-btn,
 .shrink-btn,
-.dpad-btn,
+.swipe-pad-pause,
 .theme-btn,
 .lang-btn {
   font-family: inherit;
@@ -899,108 +899,98 @@ body.source-open {
   overflow: hidden;
 }
 
-.dpad {
+.swipe-pad {
   display: none;
-  grid-template-areas:
-    ". up ."
-    "left pause right"
-    ". down .";
-  grid-template-columns: repeat(3, clamp(52px, 16vmin, 68px));
-  grid-auto-rows: clamp(52px, 16vmin, 68px);
+  align-items: stretch;
   gap: 8px;
-  justify-content: center;
+  width: 100%;
   user-select: none;
   -webkit-user-select: none;
 }
 
-.dpad-btn {
+.swipe-pad-surface {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-height: 72px;
+  padding: 10px 12px;
+  color: var(--ink-soft);
+  background: var(--chip);
+  border: 2px dashed color-mix(in srgb, var(--ink-soft) 28%, transparent);
+  border-radius: 14px;
+  touch-action: none;
+}
+
+.swipe-pad-icon {
+  display: block;
+  width: 28px;
+  height: 28px;
+  opacity: 0.72;
+  pointer-events: none;
+}
+
+.swipe-pad-label {
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+.swipe-pad-pause {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+  width: clamp(52px, 13vmin, 64px);
+  height: clamp(52px, 13vmin, 64px);
   color: var(--ink);
-  background: var(--chip);
+  background: var(--amber);
   border: none;
-  border-radius: 10px;
+  border-radius: 50%;
   cursor: pointer;
   touch-action: none;
-  box-shadow: 0 3px 0 var(--chip-press);
+  box-shadow: 0 3px 0 var(--amber-press);
 }
 
-.dpad-icon {
+.swipe-pad-pause-icon {
   display: block;
-  width: 42%;
-  height: 42%;
+  width: 36%;
+  height: 36%;
   fill: currentColor;
   stroke: currentColor;
-  stroke-width: 2;
+  stroke-width: 0;
   stroke-linejoin: round;
   pointer-events: none;
 }
 
-.dpad-left .dpad-icon {
-  transform: rotate(-90deg);
-}
-
-.dpad-right .dpad-icon {
-  transform: rotate(90deg);
-}
-
-.dpad-down .dpad-icon {
-  transform: rotate(180deg);
-}
-
-.dpad-btn:active {
+.swipe-pad-pause:active {
   transform: translateY(2px);
-  box-shadow: 0 1px 0 var(--chip-press);
+  box-shadow: 0 1px 0 var(--amber-press);
 }
 
-.dpad-up {
-  grid-area: up;
-}
-.dpad-left {
-  grid-area: left;
-}
-.dpad-right {
-  grid-area: right;
-}
-.dpad-down {
-  grid-area: down;
-}
-
-.dpad-pause {
-  grid-area: pause;
-  color: var(--ink);
-  border-radius: 50%;
-  background: var(--amber);
-  box-shadow: 0 3px 0 var(--amber-press);
-}
-
-.dpad-pause .dpad-icon {
-  width: 36%;
-  height: 36%;
-  stroke-width: 0;
-}
-
-.dpad-pause .icon-play {
+.swipe-pad-pause .icon-play {
   display: none;
 }
 
-.dpad-pause.is-paused .icon-pause {
+.swipe-pad-pause.is-paused .icon-pause {
   display: none;
 }
 
-.dpad-pause.is-paused .icon-play {
+.swipe-pad-pause.is-paused .icon-play {
   display: block;
   stroke-width: 1.6;
 }
 
 @media (pointer: coarse) {
   .game-wrap {
-    --chrome-h: 348px;
+    --chrome-h: 248px;
   }
 
-  .dpad {
-    display: grid;
+  .swipe-pad {
+    display: flex;
   }
 
   .hint {
@@ -1032,10 +1022,12 @@ body.source-open {
     aspect-ratio: 1 / 1;
   }
 
-  .dpad {
-    grid-template-columns: repeat(3, clamp(48px, 13vmin, 60px));
-    grid-auto-rows: clamp(48px, 13vmin, 60px);
-    gap: 6px;
+  .swipe-pad {
+    min-height: clamp(72px, 12vmin, 88px);
+  }
+
+  .swipe-pad-pause {
+    align-self: center;
   }
 }
 
@@ -1046,7 +1038,7 @@ body.source-open {
     grid-template-columns: minmax(0, 1fr) auto;
     grid-template-areas:
       "header header"
-      "board dpad";
+      "board swipePad";
     align-items: center;
     width: min(760px, 100%);
   }
@@ -1059,9 +1051,22 @@ body.source-open {
     grid-area: board;
   }
 
-  .dpad {
-    grid-area: dpad;
+  .swipe-pad {
+    grid-area: swipePad;
+    flex-direction: column;
+    width: clamp(88px, 18vmin, 112px);
     padding-inline: 8px;
+  }
+
+  .swipe-pad-surface {
+    flex: 1;
+    min-height: 0;
+  }
+
+  .swipe-pad-pause {
+    width: clamp(52px, 13vmin, 60px);
+    height: clamp(52px, 13vmin, 60px);
+    align-self: center;
   }
 
   .auto-play-btn {

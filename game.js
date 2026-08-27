@@ -19,6 +19,7 @@
   const boardTransition = document.getElementById("board-transition");
   const playBtn = document.getElementById("play-btn");
   const pauseBtn = document.getElementById("pause-btn");
+  const swipePadSurface = document.getElementById("swipe-pad-surface");
   const themeBtn = document.getElementById("theme-btn");
   const langBtn = document.getElementById("lang-btn");
   const shopBtn = document.getElementById("shop-btn");
@@ -70,7 +71,8 @@
       coinsWord: "coins",
       overlayTitleIdle: "Hungry?",
       overlayTextIdle: "Arrows, WASD, or a swipe. Don't bite yourself.",
-      overlayTextMobile: "Swipe the board or tap the arrows.",
+      overlayTextMobile: "Swipe the board or the pad.",
+      swipePadLabel: "Swipe",
       playGo: "Go",
       auto: "Auto",
       stop: "Stop",
@@ -136,12 +138,8 @@
       ariaLangEn: "Switch to English",
       ariaPause: "Pause",
       ariaResume: "Resume",
-      ariaMoveUp: "Move up",
-      ariaMoveDown: "Move down",
-      ariaMoveLeft: "Move left",
-      ariaMoveRight: "Move right",
       ariaClose: "Close",
-      ariaDpad: "Direction controls",
+      ariaSwipePad: "Swipe controls",
       ariaLoadout: "Choose boosts for next run",
       ariaShrinkPotion: "Use shrink potion",
       ariaSourceFiles: "Source files",
@@ -153,7 +151,8 @@
       coinsWord: "เหรียญ",
       overlayTitleIdle: "หิวมั้ย?",
       overlayTextIdle: "ลูกศร, WASD หรือปัดนิ้ว อย่าไปกัดตัวเองนะ",
-      overlayTextMobile: "ปัดบนกระดานหรือแตะลูกศร",
+      overlayTextMobile: "ปัดบนกระดานหรือแผ่นปัด",
+      swipePadLabel: "ปัด",
       playGo: "ไปเลย",
       auto: "ออโต้",
       stop: "หยุด",
@@ -219,12 +218,8 @@
       ariaLangEn: "Switch to English",
       ariaPause: "หยุดชั่วคราว",
       ariaResume: "เล่นต่อ",
-      ariaMoveUp: "เลื่อนขึ้น",
-      ariaMoveDown: "เลื่อนลง",
-      ariaMoveLeft: "เลื่อนซ้าย",
-      ariaMoveRight: "เลื่อนขวา",
       ariaClose: "ปิด",
-      ariaDpad: "ปุ่มควบคุมทิศทาง",
+      ariaSwipePad: "แผ่นปัดควบคุมทิศทาง",
       ariaLoadout: "เลือกบูสต์สำหรับรอบถัดไป",
       ariaShrinkPotion: "ใช้ยาเล็ก",
       ariaSourceFiles: "ไฟล์โค้ด",
@@ -303,7 +298,9 @@
       t(state === "paused" ? "ariaResume" : "ariaPause"),
     );
     shrinkBtn.setAttribute("aria-label", t("ariaShrinkPotion"));
-    document.getElementById("dpad").setAttribute("aria-label", t("ariaDpad"));
+    document
+      .getElementById("swipe-pad")
+      .setAttribute("aria-label", t("ariaSwipePad"));
     loadoutTogglesEl.setAttribute("aria-label", t("ariaLoadout"));
     shopCloseBtn.setAttribute("aria-label", t("ariaClose"));
     document
@@ -312,15 +309,6 @@
     document
       .querySelector(".source-tabs")
       .setAttribute("aria-label", t("ariaSourceFiles"));
-    const dirLabels = {
-      up: "ariaMoveUp",
-      down: "ariaMoveDown",
-      left: "ariaMoveLeft",
-      right: "ariaMoveRight",
-    };
-    document.querySelectorAll(".dpad-btn[data-dir]").forEach((btn) => {
-      btn.setAttribute("aria-label", t(dirLabels[btn.dataset.dir]));
-    });
   }
 
   function applyLanguage(lang) {
@@ -494,7 +482,9 @@
   // --- Game state ---
 
   let snake,
+    prevSnake,
     dir,
+    prevDir,
     dirQueue,
     foods,
     coin,
@@ -678,6 +668,11 @@
     return base / run.speedFactor;
   }
 
+  function syncPrevSnake() {
+    prevSnake = snake.map((s) => ({ x: s.x, y: s.y }));
+    prevDir = dir;
+  }
+
   function reset() {
     const mid = Math.floor(GRID / 2);
     snake = [
@@ -696,6 +691,7 @@
     scoreEl.textContent = "0";
     tickMs = computeTickMs();
     spawnApples();
+    syncPrevSnake();
   }
 
   function softReset() {
@@ -710,6 +706,7 @@
     foods = [];
     tickMs = computeTickMs();
     spawnApples();
+    syncPrevSnake();
   }
 
   const BOARD_TRANSITION_MS = 1400;
@@ -762,6 +759,7 @@
       const occ = occupiedCells();
       if (occ.has(`${goldenApple.x},${goldenApple.y}`)) goldenApple = null;
     }
+    syncPrevSnake();
   }
 
   function useShrink() {
@@ -778,6 +776,7 @@
     inventory.shrink--;
     run.shrinkArmed = false;
     saveInventory();
+    syncPrevSnake();
   }
 
   function setDirection(name) {
@@ -790,6 +789,8 @@
   }
 
   function step() {
+    prevSnake = snake.map((s) => ({ x: s.x, y: s.y }));
+    prevDir = dir;
     if (dirQueue.length) dir = dirQueue.shift();
 
     const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
@@ -1032,18 +1033,60 @@
   }
 
   function segmentsAdjacent(a, b) {
-    return Math.abs(a.x - b.x) + Math.abs(a.y - b.y) === 1;
+    return Math.abs(a.x - b.x) + Math.abs(a.y - b.y) < 1.5;
   }
 
-  function drawSnake() {
+  function clamp01(v) {
+    return Math.max(0, Math.min(1, v));
+  }
+
+  function dirAngle(d) {
+    if (d === DIRS.right) return Math.PI / 2;
+    if (d === DIRS.down) return Math.PI;
+    if (d === DIRS.left) return -Math.PI / 2;
+    return 0;
+  }
+
+  function lerpAngle(a, b, p) {
+    let diff = b - a;
+    while (diff > Math.PI) diff -= Math.PI * 2;
+    while (diff < -Math.PI) diff += Math.PI * 2;
+    return a + diff * p;
+  }
+
+  function interpolateSnakeView(p) {
+    if (!prevSnake?.length) {
+      return snake.map((s) => ({ x: s.x, y: s.y }));
+    }
+
+    const view = [];
+    for (let i = 0; i < snake.length; i++) {
+      const curr = snake[i];
+      const prev = prevSnake[Math.min(i, prevSnake.length - 1)];
+      const dx = Math.abs(curr.x - prev.x);
+      const dy = Math.abs(curr.y - prev.y);
+
+      if (dx > 1 || dy > 1) {
+        view.push({ x: curr.x, y: curr.y });
+      } else {
+        view.push({
+          x: prev.x + (curr.x - prev.x) * p,
+          y: prev.y + (curr.y - prev.y) * p,
+        });
+      }
+    }
+    return view;
+  }
+
+  function drawSnake(view, headAngle) {
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
 
     const drawBody = (widthExtra, colorFn) => {
-      for (let i = snake.length - 1; i >= 1; i--) {
-        const a = snake[i];
-        const b = snake[i - 1];
-        const taper = 1 - 0.32 * (i / (snake.length - 1));
+      for (let i = view.length - 1; i >= 1; i--) {
+        const a = view[i];
+        const b = view[i - 1];
+        const taper = 1 - 0.32 * (i / (view.length - 1));
         ctx.strokeStyle = colorFn(i);
         ctx.lineWidth = CELL * 0.72 * taper + widthExtra;
 
@@ -1074,16 +1117,12 @@
     };
 
     drawBody(CELL * 0.1, () => palette.snakeLine);
-    drawBody(0, (i) => segmentColor(i, snake.length));
+    drawBody(0, (i) => segmentColor(i, view.length));
 
-    const head = snake[0];
+    const head = view[0];
     const cx = (head.x + 0.5) * CELL;
     const cy = (head.y + 0.5) * CELL;
     const size = CELL * 1.35;
-    let angle = 0;
-    if (dir === DIRS.right) angle = Math.PI / 2;
-    else if (dir === DIRS.down) angle = Math.PI;
-    else if (dir === DIRS.left) angle = -Math.PI / 2;
 
     const mouthOpen = appleAheadOfHead();
     const face =
@@ -1093,7 +1132,7 @@
 
     ctx.save();
     ctx.translate(cx, cy);
-    ctx.rotate(angle);
+    ctx.rotate(headAngle);
     if (face.complete && face.naturalWidth) {
       ctx.drawImage(face, -size / 2, -size / 2, size, size);
     } else {
@@ -1106,9 +1145,12 @@
   }
 
   function render(time) {
+    const p = state === "playing" ? clamp01((time - lastTick) / tickMs) : 1;
+    const view = interpolateSnakeView(p);
+    const headAngle = lerpAngle(dirAngle(prevDir), dirAngle(dir), p);
     drawBoard();
     drawFoods(time);
-    drawSnake();
+    drawSnake(view, headAngle);
   }
 
   // --- Game flow ---
@@ -1664,37 +1706,58 @@
     }
   });
 
-  let touchStart = null;
-  canvas.addEventListener(
-    "touchstart",
-    (e) => {
-      touchStart = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-    },
-    { passive: true },
-  );
+  function bindSwipeTarget(el, { onTap } = {}) {
+    let touchStart = null;
+    let tapStart = null;
 
-  canvas.addEventListener(
-    "touchmove",
-    (e) => {
-      e.preventDefault();
-      if (!touchStart || state !== "playing" || autoPlayEnabled) return;
-      const dx = e.touches[0].clientX - touchStart.x;
-      const dy = e.touches[0].clientY - touchStart.y;
-      if (Math.abs(dx) < 24 && Math.abs(dy) < 24) return;
-      if (Math.abs(dx) > Math.abs(dy)) setDirection(dx > 0 ? "right" : "left");
-      else setDirection(dy > 0 ? "down" : "up");
-      touchStart = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-    },
-    { passive: false },
-  );
+    el.addEventListener(
+      "touchstart",
+      (e) => {
+        const touch = e.touches[0];
+        touchStart = { x: touch.clientX, y: touch.clientY };
+        tapStart = { x: touch.clientX, y: touch.clientY, time: Date.now() };
+      },
+      { passive: true },
+    );
 
-  document.querySelectorAll(".dpad-btn[data-dir]").forEach((btn) => {
-    btn.addEventListener("pointerdown", (e) => {
-      e.preventDefault();
-      if (state === "playing") {
-        if (!autoPlayEnabled) setDirection(btn.dataset.dir);
-      } else if (state === "idle" || state === "over") start();
-    });
+    el.addEventListener(
+      "touchmove",
+      (e) => {
+        e.preventDefault();
+        if (!touchStart || state !== "playing" || autoPlayEnabled) return;
+        const dx = e.touches[0].clientX - touchStart.x;
+        const dy = e.touches[0].clientY - touchStart.y;
+        if (Math.abs(dx) < 24 && Math.abs(dy) < 24) return;
+        if (Math.abs(dx) > Math.abs(dy))
+          setDirection(dx > 0 ? "right" : "left");
+        else setDirection(dy > 0 ? "down" : "up");
+        touchStart = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+      },
+      { passive: false },
+    );
+
+    el.addEventListener(
+      "touchend",
+      (e) => {
+        if (tapStart && onTap) {
+          const touch = e.changedTouches[0];
+          const dx = touch.clientX - tapStart.x;
+          const dy = touch.clientY - tapStart.y;
+          const dt = Date.now() - tapStart.time;
+          if (Math.abs(dx) < 12 && Math.abs(dy) < 12 && dt < 300) onTap();
+        }
+        touchStart = null;
+        tapStart = null;
+      },
+      { passive: true },
+    );
+  }
+
+  bindSwipeTarget(canvas);
+  bindSwipeTarget(swipePadSurface, {
+    onTap: () => {
+      if (state === "idle" || state === "over") start();
+    },
   });
 
   pauseBtn.addEventListener("pointerdown", (e) => {
