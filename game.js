@@ -110,7 +110,7 @@
       shopFloors: "Boards",
       comboLabel: "×{n} combo",
       toastCombo: "×{n} combo!",
-      toastPoison: "Bitter berry — shortened!",
+      toastPoison: "Bitter berry — score & combo hit!",
       overlayStats: "best {best} · {coins} coins",
       floor_meadow_name: "Meadow",
       floor_meadow_desc: "Soft lavender checks.",
@@ -161,13 +161,13 @@
       shop_dash_name: "Sugar rush",
       shop_dash_desc: "Move 40% faster for one run.",
       shop_trail_name: "Sparkle trail",
-      shop_trail_desc: "Leave glitter while slithering (cosmetic).",
+      shop_trail_desc: "Leave a bright glitter trail while slithering.",
       shop_antidote_name: "Antidote",
       shop_antidote_desc: "Ignore the next bitter berry.",
       shop_sweet_tooth_name: "Sweet tooth",
       shop_sweet_tooth_desc: "Every apple is worth +1 forever.",
       shop_echo_name: "Echo",
-      shop_echo_desc: "Leave a soft afterimage while moving.",
+      shop_echo_desc: "A clear ghost afterimage follows behind you.",
       shop_feast_name: "Feast",
       shop_feast_desc: "Next 3 apples give +2 bonus each.",
       shop_calm_name: "Calm",
@@ -189,7 +189,7 @@
       tipIdle4: "Coin magnet pulls nearby coins toward you.",
       tipIdle5: "Near your best, the HUD shows how close you are.",
       tipIdle6: "Claim finished goals in the shop for bonus coins.",
-      tipIdle7: "Purple berries shrink you — antidote or tidy helps.",
+      tipIdle7: "Purple berries dump score and combo — antidote or tidy helps.",
       tipIdle8: "A shield buys one crash — turn away before the next hit.",
       tipIdle9: "X uses a shrink potion mid-run when one is armed.",
       tipIdle10: "Permanents in the shop last forever — worth saving for.",
@@ -197,7 +197,7 @@
       tipIdleMobile1: "Tap pause anytime. Shop works mid-run.",
       tipIdleMobile2: "Gold = big score. Blue = warp through walls.",
       tipIdleMobile3: "Enter starts a run. Double-tap the board to pause.",
-      tipIdleMobile4: "Purple = shrink. Gold = score. Blue = warp.",
+      tipIdleMobile4: "Purple = score hit. Gold = score. Blue = warp.",
       tipIdleMobile5: "Shield blocks one crash — then turn away fast.",
       tipIdleMobile6: "Armed shrink button halves your length — tap carefully.",
       tipIdleMobile7: "Shop permanents stay unlocked after you buy them.",
@@ -443,7 +443,7 @@
       floor_patio_desc: "Sunny stone courtyard tiles.",
       overlayPauseKeys: "space · esc · b shop · r restart",
       shop_berry_ward_name: "Berry ward",
-      shop_berry_ward_desc: "Bitter berries show up less often.",
+      shop_berry_ward_desc: "Harmful bitter berries show up less often.",
       shop_golden_luck_name: "Golden luck",
       shop_golden_luck_desc: "Golden apples appear a bit sooner.",
       shop_nibble_name: "Nibble start",
@@ -451,7 +451,7 @@
       shop_sharp_eyes_name: "Sharp eyes",
       shop_sharp_eyes_desc: "Mouth opens sooner when food is near.",
       shop_tidy_name: "Tidy bite",
-      shop_tidy_desc: "Bitter berries fade away faster.",
+      shop_tidy_desc: "Harmful bitter berries leave the board sooner.",
       shop_steady_hands_name: "Steady hands",
       shop_steady_hands_desc: "Keep combos alive a few steps longer.",
       shop_warp_linger_name: "Warp linger",
@@ -574,7 +574,7 @@
       shopFloors: "กระดาน",
       comboLabel: "คอมโบ ×{n}",
       toastCombo: "คอมโบ ×{n}!",
-      toastPoison: "เบอร์รีขม — ตัวสั้นลง!",
+      toastPoison: "เบอร์รีขม — เสียคะแนนและคอมโบ!",
       overlayStats: "สูงสุด {best} · {coins} เหรียญ",
       floor_meadow_name: "ทุ่งหญ้า",
       floor_meadow_desc: "ตารางม่วงอ่อน",
@@ -625,13 +625,13 @@
       shop_dash_name: "ซูการ์รัช",
       shop_dash_desc: "เคลื่อนเร็วขึ้น 40% ต่อรอบ",
       shop_trail_name: "ทางประกาย",
-      shop_trail_desc: "ทิ้งประกายตอนเลื้อย (ของแต่ง)",
+      shop_trail_desc: "ทิ้งทางประกายสว่างตอนเลื้อย",
       shop_antidote_name: "ยาแก้พิษ",
       shop_antidote_desc: "กันเบอร์รีขมได้ครั้งหนึ่ง",
       shop_sweet_tooth_name: "ฟันหวาน",
       shop_sweet_tooth_desc: "แอปเปิ้ลได้ +1 ตลอดไป",
       shop_echo_name: "เงาตาม",
-      shop_echo_desc: "ทิ้งเงาจางๆ ตอนเลื้อย",
+      shop_echo_desc: "มีเงาชัดๆ ตามหลังตอนเลื้อย",
       shop_feast_name: "งานเลี้ยง",
       shop_feast_desc: "แอปเปิ้ล 3 ลูกถัดไปได้โบนัส +2",
       shop_calm_name: "ใจเย็น",
@@ -653,7 +653,7 @@
       tipIdle4: "แม่เหล็กเหรียญดึงเหรียญใกล้ๆ เข้าหา",
       tipIdle5: "ใกล้คะแนนสูงสุด HUD จะบอกว่าเหลือเท่าไร",
       tipIdle6: "รับรางวัลภารกิจในร้านได้เหรียญโบนัส",
-      tipIdle7: "เบอร์รีม่วงทำให้สั้น — ยาแก้หรือกัดสะอาดช่วยได้",
+      tipIdle7: "เบอร์รีม่วงตัดคะแนนและคอมโบ — ยาแก้หรือกัดสะอาดช่วยได้",
       tipIdle8: "โล่กันชนครั้งเดียว — รีบเลี้ยวหนีก่อนโดนรอบถัดไป",
       tipIdle9: "กด X ใช้ยาหดกลางรอบเมื่อติดอาวุธไว้",
       tipIdle10: "ของถาวรในร้านอยู่ตลอด — คุ้มที่จะเก็บเหรียญซื้อ",
@@ -661,7 +661,7 @@
       tipIdleMobile1: "แตะพักได้ทุกเมื่อ ร้านใช้กลางรอบได้",
       tipIdleMobile2: "ทอง = คะแนนเยอะ ฟ้า = วาร์ปกำแพง",
       tipIdleMobile3: "Enter เริ่มเล่น แตะสองครั้งที่กระดานเพื่อพัก",
-      tipIdleMobile4: "ม่วง = สั้น ทอง = คะแนน ฟ้า = วาร์ป",
+      tipIdleMobile4: "ม่วง = เสียคะแนน ทอง = คะแนน ฟ้า = วาร์ป",
       tipIdleMobile5: "โล่กันชนครั้งเดียว — เลี้ยวหนีเร็วๆ",
       tipIdleMobile6: "ปุ่มยาหดทำให้สั้นครึ่ง — แตะเมื่อจำเป็น",
       tipIdleMobile7: "ของถาวรในร้านปลดล็อกแล้วอยู่ตลอด",
@@ -907,7 +907,7 @@
       floor_patio_desc: "ตารางลานหินแดดอุ่น",
       overlayPauseKeys: "space · esc · b ร้าน · r เริ่มใหม่",
       shop_berry_ward_name: "เกราะเบอร์รี",
-      shop_berry_ward_desc: "เบอร์รีขมโผล่น้อยลง",
+      shop_berry_ward_desc: "เบอร์รีขมที่อันตรายโผล่น้อยลง",
       shop_golden_luck_name: "โชคทอง",
       shop_golden_luck_desc: "แอปเปิ้ลทองโผล่เร็วขึ้นนิดหน่อย",
       shop_nibble_name: "เริ่มยาว",
@@ -915,7 +915,7 @@
       shop_sharp_eyes_name: "ตาคม",
       shop_sharp_eyes_desc: "อ้าปากเร็วขึ้นเมื่ออาหารใกล้",
       shop_tidy_name: "กัดสะอาด",
-      shop_tidy_desc: "เบอร์รีขมหายเร็วขึ้น",
+      shop_tidy_desc: "เบอร์รีขมที่อันตรายหายจากกระดานเร็วขึ้น",
       shop_steady_hands_name: "มือนิ่ง",
       shop_steady_hands_desc: "คอมโบอยู่ได้นานขึ้นอีกนิด",
       shop_warp_linger_name: "วาร์ปยาว",
@@ -2293,6 +2293,7 @@
 
   let snake,
     prevSnake,
+    echoSnake,
     dir,
     prevDir,
     dirQueue,
@@ -2351,6 +2352,9 @@
       earlyCoinArmed: false,
       earlyCoinPending: false,
       bonusAppleGranted: false,
+      // Extra pops applied from the tip of the tail over following steps
+      // (shrink potion) so length change stays smooth.
+      tailTrimLeft: 0,
       // After a shield blocks a crash, the snake freezes in place until the
       // player steers away, instead of instantly crashing again.
       shieldHold: false,
@@ -2766,6 +2770,7 @@
 
   function syncPrevSnake() {
     prevSnake = snake.map((s) => ({ x: s.x, y: s.y }));
+    echoSnake = prevSnake.map((s) => ({ x: s.x, y: s.y }));
     prevDir = dir;
   }
 
@@ -2906,11 +2911,14 @@
     if (snake.length <= 3) return;
     const head = snake[0];
     const newLen = Math.max(3, Math.floor(snake.length / 2));
-    snake = snake.slice(0, newLen);
+    const cut = snake.length - newLen;
+    if (cut <= 0) return;
+    // Queue tip-of-tail pops so the body shortens smoothly over the next
+    // steps instead of snapping half the snake away in one frame.
+    run.tailTrimLeft = (run.tailTrimLeft || 0) + cut;
     run.shrinkArmed = false;
     updateShrinkBtn();
     updateRunHud();
-    syncPrevSnake();
     showBoardToast(t("toastShrink"));
     spawnEatBurst(head.x, head.y, "#8fbc4a");
     spawnTrailSpark(head.x, head.y, true, 100 + Math.random() * 30);
@@ -2928,6 +2936,11 @@
   }
 
   function step() {
+    // Keep an older pose for Echo so the afterimage sits clearly behind
+    // the live interpolated body instead of hiding under it.
+    echoSnake = prevSnake
+      ? prevSnake.map((s) => ({ x: s.x, y: s.y }))
+      : snake.map((s) => ({ x: s.x, y: s.y }));
     prevSnake = snake.map((s) => ({ x: s.x, y: s.y }));
     prevDir = dir;
     if (dirQueue.length) dir = dirQueue.shift();
@@ -3030,11 +3043,9 @@
       maybeGrantBonusApple();
     }
 
-    let atePoison = false;
     if (poisonBerry && head.x === poisonBerry.x && head.y === poisonBerry.y) {
       poisonBerry = null;
       scheduleNextPoisonBerry(performance.now());
-      atePoison = true;
       if (!aiAssisted) {
         if (run.antidote > 0) {
           run.antidote--;
@@ -3045,12 +3056,14 @@
           showBoardToast(t("toastAntidote"));
           updateRunHud();
         } else {
+          // Score + combo only — length stays the same (shorter would be easier).
           comboCount = 0;
           stepsSinceEat = comboWindowSteps() + 1;
-          if (snake.length > 3) {
-            const newLen = Math.max(3, snake.length - 3);
-            snake = snake.slice(0, newLen);
-            syncPrevSnake();
+          const penalty = Math.min(score, 3 * run.scorePerApple);
+          if (penalty > 0) {
+            score -= penalty;
+            scoreEl.textContent = score;
+            spawnScoreFloat(head.x, head.y, `−${penalty}`, "#7a3d8a");
           }
           spawnEatBurst(head.x, head.y, "#7a3d8a");
           spawnTrailSpark(head.x, head.y, true, 280 + Math.random() * 30);
@@ -3092,13 +3105,20 @@
         boardCleared();
         return;
       }
-    } else if (!atePoison && !atePower) {
+    } else if (!atePower) {
       stepsSinceEat = (stepsSinceEat || 0) + 1;
       if (stepsSinceEat > comboWindowSteps()) {
         comboCount = 0;
         updateRunHud();
       }
       snake.pop();
+    }
+
+    // One tip-of-tail pop per step so shrink potion shortens smoothly.
+    if (run.tailTrimLeft > 0 && snake.length > 3) {
+      snake.pop();
+      run.tailTrimLeft--;
+      if (run.tailTrimLeft === 0) updateRunHud();
     }
 
     if (run.tempGhost > 0) {
@@ -3596,20 +3616,24 @@
   function spawnTrailSpark(x, y, force = false, hueOverride = null) {
     const dashTrail = run?.speedFactor > 1;
     if ((!force && !run?.sparkleTrail && !dashTrail) || aiAssisted) return;
-    trailSparks.push({
-      x: (x + 0.35 + Math.random() * 0.3) * CELL,
-      y: (y + 0.35 + Math.random() * 0.3) * CELL,
-      life: 1,
-      hue:
-        hueOverride != null
-          ? hueOverride
-          : force
-            ? 190 + Math.random() * 40
-            : dashTrail && !run.sparkleTrail
-              ? 8 + Math.random() * 24
-              : 40 + Math.random() * 40,
-    });
-    if (trailSparks.length > 40) trailSparks.splice(0, trailSparks.length - 40);
+    const count = force ? 1 : run?.sparkleTrail ? 3 : 1;
+    for (let n = 0; n < count; n++) {
+      trailSparks.push({
+        x: (x + 0.15 + Math.random() * 0.7) * CELL,
+        y: (y + 0.15 + Math.random() * 0.7) * CELL,
+        life: run?.sparkleTrail && !force ? 1.15 : 1,
+        hue:
+          hueOverride != null
+            ? hueOverride
+            : force
+              ? 190 + Math.random() * 40
+              : dashTrail && !run.sparkleTrail
+                ? 8 + Math.random() * 24
+                : 38 + Math.random() * 50,
+        size: run?.sparkleTrail && !force ? 0.12 : 0.08,
+      });
+    }
+    if (trailSparks.length > 72) trailSparks.splice(0, trailSparks.length - 72);
   }
 
   function spawnEatBurst(x, y, color) {
@@ -3644,15 +3668,22 @@
   function drawTrailSparks() {
     for (let i = trailSparks.length - 1; i >= 0; i--) {
       const s = trailSparks[i];
-      s.life -= 0.035;
+      s.life -= 0.022;
       if (s.life <= 0) {
         trailSparks.splice(i, 1);
         continue;
       }
-      ctx.globalAlpha = s.life * 0.85;
-      ctx.fillStyle = `hsl(${s.hue} 85% 62%)`;
+      const fade = Math.min(1, s.life);
+      ctx.globalAlpha = fade * 0.95;
+      ctx.fillStyle = `hsl(${s.hue} 90% 65%)`;
       ctx.beginPath();
-      ctx.arc(s.x, s.y, Math.max(1.2, CELL * 0.08 * s.life), 0, Math.PI * 2);
+      ctx.arc(
+        s.x,
+        s.y,
+        Math.max(1.6, CELL * (s.size || 0.08) * Math.min(1, fade + 0.15)),
+        0,
+        Math.PI * 2,
+      );
       ctx.fill();
       ctx.globalAlpha = 1;
     }
@@ -3840,6 +3871,25 @@
         });
       }
     }
+
+    // Tip-of-tail trims (shrink potion): each leftover segment chases the
+    // one ahead so the tail sucks in along the body instead of vanishing.
+    if (prevSnake.length > snake.length && view.length) {
+      for (let i = snake.length; i < prevSnake.length; i++) {
+        const prev = prevSnake[i];
+        const target = view[i - 1];
+        const dx = Math.abs(target.x - prev.x);
+        const dy = Math.abs(target.y - prev.y);
+        if (dx > 1 || dy > 1) {
+          view.push({ x: target.x, y: target.y });
+        } else {
+          view.push({
+            x: prev.x + (target.x - prev.x) * p,
+            y: prev.y + (target.y - prev.y) * p,
+          });
+        }
+      }
+    }
     return view;
   }
 
@@ -3886,25 +3936,21 @@
     if (run?.tempGhost > 0) {
       drawBody(CELL * 0.22, () => "rgba(47, 143, 196, 0.35)");
     }
-    if (run?.echoTrail && prevSnake?.length) {
-      ctx.globalAlpha = 0.28;
-      const echoView = prevSnake.map((s) => ({ x: s.x, y: s.y }));
-      const savedView = view;
-      // draw faded previous pose using same body helper on echo coords
-      for (let i = echoView.length - 1; i >= 1; i--) {
-        const a = echoView[i];
-        const b = echoView[i - 1];
+    if (run?.echoTrail && echoSnake?.length) {
+      ctx.globalAlpha = 0.42;
+      for (let i = echoSnake.length - 1; i >= 1; i--) {
+        const a = echoSnake[i];
+        const b = echoSnake[i - 1];
         if (!segmentsAdjacent(a, b)) continue;
-        const taper = 1 - 0.32 * (i / (echoView.length - 1));
-        ctx.strokeStyle = segmentColor(i, echoView.length);
-        ctx.lineWidth = CELL * 0.55 * taper;
+        const taper = 1 - 0.32 * (i / (echoSnake.length - 1));
+        ctx.strokeStyle = segmentColor(i, echoSnake.length);
+        ctx.lineWidth = CELL * 0.62 * taper;
         ctx.beginPath();
         ctx.moveTo((a.x + 0.5) * CELL, (a.y + 0.5) * CELL);
         ctx.lineTo((b.x + 0.5) * CELL, (b.y + 0.5) * CELL);
         ctx.stroke();
       }
       ctx.globalAlpha = 1;
-      void savedView;
     }
     drawBody(0, (i) => segmentColor(i, view.length));
 
