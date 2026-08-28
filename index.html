@@ -40,6 +40,7 @@
       <header class="game-header">
         <h1 class="title">
           <img src="assets/snake-face.png" alt="" class="title-face" />
+          <span class="title-skin" id="title-skin" aria-hidden="true"></span>
           Mumu
         </h1>
         <div class="header-tools">
@@ -56,6 +57,24 @@
               <span class="score-label" data-i18n="scoreCoins">coins</span>
               <span class="score-value" id="coin-balance">0</span>
             </div>
+          </div>
+          <div class="berry-legend" aria-hidden="true">
+            <span class="berry-legend-item"
+              ><i class="berry-dot berry-dot-apple"></i
+              ><span data-i18n="legendApple">apple</span></span
+            >
+            <span class="berry-legend-item"
+              ><i class="berry-dot berry-dot-gold"></i
+              ><span data-i18n="legendGold">gold</span></span
+            >
+            <span class="berry-legend-item"
+              ><i class="berry-dot berry-dot-poison"></i
+              ><span data-i18n="legendPoison">bitter</span></span
+            >
+            <span class="berry-legend-item"
+              ><i class="berry-dot berry-dot-warp"></i
+              ><span data-i18n="legendWarp">warp</span></span
+            >
           </div>
           <button
             id="lang-btn"
@@ -106,7 +125,28 @@
               <p id="overlay-text">
                 Arrows, WASD, or a swipe. Don't bite yourself.
               </p>
-              <button id="play-btn" class="play-btn">Go</button>
+              <p class="overlay-stats" id="overlay-stats"></p>
+              <div class="overlay-actions" id="overlay-actions">
+                <button id="play-btn" class="play-btn">Go</button>
+                <button
+                  id="overlay-shop-btn"
+                  class="overlay-secondary-btn"
+                  type="button"
+                  hidden
+                  data-i18n="shop"
+                >
+                  Shop
+                </button>
+                <button
+                  id="overlay-quit-btn"
+                  class="overlay-ghost-btn"
+                  type="button"
+                  hidden
+                  data-i18n="endRun"
+                >
+                  End run
+                </button>
+              </div>
             </div>
           </div>
 
@@ -116,6 +156,10 @@
 
           <div class="board-toast" id="board-toast" hidden></div>
         </div>
+      </div>
+
+      <div class="run-hud" id="run-hud" hidden>
+        <div class="run-hud-boosts" id="run-hud-boosts"></div>
       </div>
 
       <div class="swipe-pad" id="swipe-pad" aria-label="Swipe controls">
@@ -156,6 +200,14 @@
       </div>
 
       <div class="action-row">
+        <button
+          id="desktop-pause-btn"
+          class="desktop-pause-btn"
+          type="button"
+          aria-label="Pause"
+        >
+          Pause
+        </button>
         <button
           id="auto-play-btn"
           class="auto-play-btn"
@@ -235,6 +287,35 @@
             </button>
           </div>
         </header>
+        <div class="shop-tabs" id="shop-tabs" role="tablist" aria-label="Shop">
+          <button
+            class="shop-tab is-active"
+            type="button"
+            role="tab"
+            data-shop-tab="goals"
+            aria-selected="true"
+          >
+            Goals
+          </button>
+          <button
+            class="shop-tab"
+            type="button"
+            role="tab"
+            data-shop-tab="boosts"
+            aria-selected="false"
+          >
+            Boosts
+          </button>
+          <button
+            class="shop-tab"
+            type="button"
+            role="tab"
+            data-shop-tab="looks"
+            aria-selected="false"
+          >
+            Looks
+          </button>
+        </div>
         <div class="shop-body" id="shop-items"></div>
       </div>
     </div>
