@@ -1098,11 +1098,7 @@
     playBtn.textContent = t(overlayState.btnKey);
     setOverlayMenuMode(overlayState.menuMode || "default");
     if (overlayStatsEl) {
-      const overKeys = [
-        "overlayOuch",
-        "overlayNewBest",
-        "overlayAiRun",
-      ];
+      const overKeys = ["overlayOuch", "overlayNewBest", "overlayAiRun"];
       const isOver = overKeys.includes(overlayState.titleKey);
       const showStats =
         overlayState.menuMode === "lobby" ||
@@ -1320,277 +1316,277 @@
     },
     {
       id: "berry",
-      price: 10,
+      price: 20,
       from: [210, 130, 188],
       to: [118, 58, 112],
     },
     {
       id: "sunset",
-      price: 12,
+      price: 24,
       from: [240, 156, 78],
       to: [156, 68, 98],
     },
     {
       id: "mint",
-      price: 12,
+      price: 24,
       from: [120, 210, 186],
       to: [42, 128, 118],
     },
     {
       id: "candy",
-      price: 16,
+      price: 32,
       from: [255, 130, 162],
       to: [196, 64, 110],
     },
     {
       id: "midnight",
-      price: 18,
+      price: 36,
       from: [130, 146, 220],
       to: [48, 52, 110],
     },
     {
       id: "lava",
-      price: 20,
+      price: 40,
       from: [255, 120, 64],
       to: [140, 40, 36],
     },
     {
       id: "frost",
-      price: 20,
+      price: 40,
       from: [170, 220, 255],
       to: [60, 110, 170],
     },
     {
       id: "neon",
-      price: 22,
+      price: 44,
       from: [180, 255, 80],
       to: [40, 200, 210],
     },
     {
       id: "shadow",
-      price: 18,
+      price: 36,
       from: [120, 120, 140],
       to: [40, 40, 55],
     },
     {
       id: "coral",
-      price: 16,
+      price: 32,
       from: [255, 140, 110],
       to: [200, 80, 90],
     },
     {
       id: "honey",
-      price: 18,
+      price: 36,
       from: [240, 190, 70],
       to: [170, 100, 30],
     },
     {
       id: "aurora",
-      price: 22,
+      price: 44,
       from: [80, 220, 200],
       to: [120, 70, 190],
     },
     {
       id: "plum",
-      price: 18,
+      price: 36,
       from: [180, 110, 170],
       to: [90, 40, 100],
     },
     {
       id: "ivory",
-      price: 16,
+      price: 32,
       from: [245, 236, 220],
       to: [200, 160, 120],
     },
     {
       id: "saffron",
-      price: 20,
+      price: 40,
       from: [255, 200, 70],
       to: [190, 110, 30],
     },
     {
       id: "jade",
-      price: 18,
+      price: 36,
       from: [90, 200, 140],
       to: [30, 110, 80],
     },
     {
       id: "cobalt",
-      price: 20,
+      price: 40,
       from: [80, 130, 220],
       to: [30, 50, 120],
     },
     {
       id: "wine",
-      price: 18,
+      price: 36,
       from: [190, 70, 100],
       to: [100, 30, 55],
     },
     {
       id: "pearl",
-      price: 16,
+      price: 32,
       from: [240, 236, 248],
       to: [160, 170, 200],
     },
     {
       id: "graphite",
-      price: 14,
+      price: 28,
       from: [160, 160, 168],
       to: [70, 72, 80],
     },
     {
       id: "maple",
-      price: 18,
+      price: 36,
       from: [220, 90, 60],
       to: [180, 120, 40],
     },
     {
       id: "olive",
-      price: 15,
+      price: 30,
       from: [170, 180, 90],
       to: [80, 100, 50],
     },
     {
       id: "lilac",
-      price: 17,
+      price: 34,
       from: [210, 170, 230],
       to: [120, 80, 160],
     },
     {
       id: "seafoam",
-      price: 16,
+      price: 32,
       from: [140, 220, 200],
       to: [50, 130, 140],
     },
     {
       id: "cocoa",
-      price: 15,
+      price: 30,
       from: [190, 130, 90],
       to: [90, 55, 40],
     },
     {
       id: "indigo",
-      price: 18,
+      price: 36,
       from: [120, 110, 210],
       to: [45, 40, 110],
     },
     {
       id: "copper",
-      price: 16,
+      price: 32,
       from: [220, 140, 80],
       to: [130, 70, 40],
     },
     {
       id: "blush",
-      price: 15,
+      price: 30,
       from: [240, 160, 170],
       to: [170, 80, 110],
     },
     {
       id: "amber",
-      price: 17,
+      price: 34,
       from: [245, 180, 70],
       to: [180, 100, 30],
     },
     {
       id: "ice",
-      price: 16,
+      price: 32,
       from: [200, 235, 255],
       to: [70, 130, 190],
     },
     {
       id: "tangerine",
-      price: 15,
+      price: 30,
       from: [255, 160, 70],
       to: [200, 80, 40],
     },
     {
       id: "smoke",
-      price: 14,
+      price: 28,
       from: [190, 190, 198],
       to: [90, 92, 100],
     },
     {
       id: "onyx",
-      price: 18,
+      price: 36,
       from: [80, 85, 95],
       to: [25, 28, 35],
     },
     {
       id: "marine",
-      price: 17,
+      price: 34,
       from: [70, 160, 200],
       to: [25, 70, 120],
     },
     {
       id: "cedar",
-      price: 15,
+      price: 30,
       from: [110, 170, 100],
       to: [40, 90, 55],
     },
     {
       id: "ruby",
-      price: 18,
+      price: 36,
       from: [230, 70, 90],
       to: [130, 25, 45],
     },
     {
       id: "sapphire",
-      price: 18,
+      price: 36,
       from: [70, 120, 230],
       to: [25, 45, 130],
     },
     {
       id: "topaz",
-      price: 17,
+      price: 34,
       from: [245, 200, 80],
       to: [180, 120, 30],
     },
     {
       id: "emerald",
-      price: 18,
+      price: 36,
       from: [60, 200, 130],
       to: [20, 100, 70],
     },
     {
       id: "amethyst",
-      price: 18,
+      price: 36,
       from: [180, 120, 230],
       to: [90, 40, 140],
     },
     {
       id: "champagne",
-      price: 16,
+      price: 32,
       from: [245, 230, 190],
       to: [190, 150, 100],
     },
     {
       id: "obsidian",
-      price: 19,
+      price: 38,
       from: [70, 75, 85],
       to: [20, 22, 28],
     },
     {
       id: "vermilion",
-      price: 17,
+      price: 34,
       from: [240, 90, 70],
       to: [150, 35, 40],
     },
     {
       id: "cinnabar",
-      price: 17,
+      price: 34,
       from: [220, 100, 80],
       to: [140, 45, 50],
     },
     {
       id: "periwinkle",
-      price: 16,
+      price: 32,
       from: [160, 170, 230],
       to: [70, 80, 160],
     },
     {
       id: "terracotta",
-      price: 15,
+      price: 30,
       from: [220, 130, 90],
       to: [140, 70, 50],
     },
@@ -1605,7 +1601,7 @@
     },
     {
       id: "sand",
-      price: 8,
+      price: 16,
       board: "#efe0c4",
       felt: "#e4d0a8",
       boardDark: "#3a3224",
@@ -1613,7 +1609,7 @@
     },
     {
       id: "pond",
-      price: 10,
+      price: 20,
       board: "#c8dde8",
       felt: "#b4d0de",
       boardDark: "#1e2e3a",
@@ -1621,7 +1617,7 @@
     },
     {
       id: "orchard",
-      price: 12,
+      price: 24,
       board: "#d8e8c4",
       felt: "#c4dcae",
       boardDark: "#243020",
@@ -1629,7 +1625,7 @@
     },
     {
       id: "slate",
-      price: 14,
+      price: 28,
       board: "#c8ced8",
       felt: "#b4bcc8",
       boardDark: "#222830",
@@ -1637,7 +1633,7 @@
     },
     {
       id: "night",
-      price: 16,
+      price: 32,
       board: "#2a3148",
       felt: "#343c58",
       boardDark: "#1a2030",
@@ -1645,7 +1641,7 @@
     },
     {
       id: "rose",
-      price: 14,
+      price: 28,
       board: "#f0d6de",
       felt: "#e4c4d0",
       boardDark: "#3a2830",
@@ -1653,7 +1649,7 @@
     },
     {
       id: "zen",
-      price: 15,
+      price: 30,
       board: "#d8ddd4",
       felt: "#c8d0c0",
       boardDark: "#2a3028",
@@ -1661,7 +1657,7 @@
     },
     {
       id: "dusk",
-      price: 16,
+      price: 32,
       board: "#d8cee8",
       felt: "#c8bcdc",
       boardDark: "#2a2438",
@@ -1669,7 +1665,7 @@
     },
     {
       id: "lagoon",
-      price: 15,
+      price: 30,
       board: "#c4e4de",
       felt: "#b0d8d0",
       boardDark: "#1e3434",
@@ -1677,7 +1673,7 @@
     },
     {
       id: "citrus",
-      price: 14,
+      price: 28,
       board: "#f0e8b8",
       felt: "#e4d8a0",
       boardDark: "#3a3420",
@@ -1685,7 +1681,7 @@
     },
     {
       id: "clay",
-      price: 13,
+      price: 26,
       board: "#e8d0bc",
       felt: "#dcc0a8",
       boardDark: "#3a2c24",
@@ -1693,7 +1689,7 @@
     },
     {
       id: "mist",
-      price: 14,
+      price: 28,
       board: "#d4dce4",
       felt: "#c4ced8",
       boardDark: "#262e38",
@@ -1701,7 +1697,7 @@
     },
     {
       id: "pine",
-      price: 15,
+      price: 30,
       board: "#c8d8c0",
       felt: "#b4c8ac",
       boardDark: "#243028",
@@ -1709,7 +1705,7 @@
     },
     {
       id: "ember",
-      price: 16,
+      price: 32,
       board: "#e8c8b0",
       felt: "#dcb498",
       boardDark: "#3a241c",
@@ -1717,7 +1713,7 @@
     },
     {
       id: "paper",
-      price: 12,
+      price: 24,
       board: "#f4f0e4",
       felt: "#e8e2d4",
       boardDark: "#2e2c28",
@@ -1725,7 +1721,7 @@
     },
     {
       id: "inkwell",
-      price: 16,
+      price: 32,
       board: "#c8d0dc",
       felt: "#b4becc",
       boardDark: "#1c222c",
@@ -1733,7 +1729,7 @@
     },
     {
       id: "tea",
-      price: 14,
+      price: 28,
       board: "#e4d8c4",
       felt: "#d8ccb4",
       boardDark: "#32281e",
@@ -1741,7 +1737,7 @@
     },
     {
       id: "pebble",
-      price: 13,
+      price: 26,
       board: "#d8d4cc",
       felt: "#cac6be",
       boardDark: "#2c2a28",
@@ -1749,7 +1745,7 @@
     },
     {
       id: "harbor",
-      price: 15,
+      price: 30,
       board: "#b8d4dc",
       felt: "#a4c8d0",
       boardDark: "#1e3038",
@@ -1757,7 +1753,7 @@
     },
     {
       id: "bloom",
-      price: 14,
+      price: 28,
       board: "#e8d4e0",
       felt: "#dcc4d4",
       boardDark: "#382830",
@@ -1765,7 +1761,7 @@
     },
     {
       id: "reef",
-      price: 15,
+      price: 30,
       board: "#c8e0d8",
       felt: "#b4d4c8",
       boardDark: "#1e3430",
@@ -1773,7 +1769,7 @@
     },
     {
       id: "frost",
-      price: 14,
+      price: 28,
       board: "#dce8f0",
       felt: "#c8dce8",
       boardDark: "#243038",
@@ -1781,7 +1777,7 @@
     },
     {
       id: "canopy",
-      price: 15,
+      price: 30,
       board: "#c8dcb4",
       felt: "#b4d0a0",
       boardDark: "#243028",
@@ -1789,7 +1785,7 @@
     },
     {
       id: "sunrise",
-      price: 14,
+      price: 28,
       board: "#f0dcc8",
       felt: "#e4d0b4",
       boardDark: "#3a3024",
@@ -1797,7 +1793,7 @@
     },
     {
       id: "twilight",
-      price: 15,
+      price: 30,
       board: "#d0c8e0",
       felt: "#c0b4d4",
       boardDark: "#2a2438",
@@ -1805,7 +1801,7 @@
     },
     {
       id: "sandstone",
-      price: 13,
+      price: 26,
       board: "#e8dcc8",
       felt: "#dccfb8",
       boardDark: "#383028",
@@ -1813,7 +1809,7 @@
     },
     {
       id: "orchid",
-      price: 15,
+      price: 30,
       board: "#e4d0e8",
       felt: "#d8c0dc",
       boardDark: "#342838",
@@ -1821,7 +1817,7 @@
     },
     {
       id: "grove",
-      price: 14,
+      price: 28,
       board: "#d0e0c4",
       felt: "#bcd4b0",
       boardDark: "#283428",
@@ -1829,7 +1825,7 @@
     },
     {
       id: "wheat",
-      price: 13,
+      price: 26,
       board: "#ece0c0",
       felt: "#e0d4b0",
       boardDark: "#383024",
@@ -1837,7 +1833,7 @@
     },
     {
       id: "ash",
-      price: 14,
+      price: 28,
       board: "#d8d6d2",
       felt: "#cac8c4",
       boardDark: "#2c2c2a",
@@ -1845,7 +1841,7 @@
     },
     {
       id: "fog",
-      price: 14,
+      price: 28,
       board: "#dde4ea",
       felt: "#cdd6de",
       boardDark: "#2a3238",
@@ -1853,7 +1849,7 @@
     },
     {
       id: "canyon",
-      price: 15,
+      price: 30,
       board: "#e8d0b8",
       felt: "#dcc4a8",
       boardDark: "#3a2c20",
@@ -1861,7 +1857,7 @@
     },
     {
       id: "mesa",
-      price: 14,
+      price: 28,
       board: "#e4c8a8",
       felt: "#d8bc9c",
       boardDark: "#3a2e22",
@@ -1869,7 +1865,7 @@
     },
     {
       id: "river",
-      price: 15,
+      price: 30,
       board: "#c4d8e4",
       felt: "#b0ccd8",
       boardDark: "#1e3038",
@@ -1877,7 +1873,7 @@
     },
     {
       id: "bay",
-      price: 14,
+      price: 28,
       board: "#c8dce8",
       felt: "#b4d0dc",
       boardDark: "#223038",
@@ -1885,7 +1881,7 @@
     },
     {
       id: "dune",
-      price: 13,
+      price: 26,
       board: "#efe0c8",
       felt: "#e4d4b4",
       boardDark: "#3a3224",
@@ -1893,7 +1889,7 @@
     },
     {
       id: "cove",
-      price: 15,
+      price: 30,
       board: "#b8d8d4",
       felt: "#a4ccc8",
       boardDark: "#1e3434",
@@ -1901,7 +1897,7 @@
     },
     {
       id: "glade",
-      price: 14,
+      price: 28,
       board: "#d4e4c8",
       felt: "#c0d8b4",
       boardDark: "#283428",
@@ -1909,7 +1905,7 @@
     },
     {
       id: "hearth",
-      price: 15,
+      price: 30,
       board: "#e8d0bc",
       felt: "#dcc4a8",
       boardDark: "#3a2820",
@@ -1917,7 +1913,7 @@
     },
     {
       id: "marsh",
-      price: 14,
+      price: 28,
       board: "#d0dcc4",
       felt: "#bcd0b0",
       boardDark: "#283028",
@@ -1925,7 +1921,7 @@
     },
     {
       id: "atelier",
-      price: 14,
+      price: 28,
       board: "#e8e4dc",
       felt: "#dcd8d0",
       boardDark: "#2e2c28",
@@ -1933,7 +1929,7 @@
     },
     {
       id: "patio",
-      price: 13,
+      price: 26,
       board: "#e4dcc8",
       felt: "#d8d0bc",
       boardDark: "#342e24",
@@ -1942,35 +1938,35 @@
   ];
 
   const SHOP_ITEMS = [
-    { id: "slow_start", price: 1 },
-    { id: "shrink", price: 1 },
-    { id: "head_start", price: 1 },
-    { id: "dash", price: 2 },
-    { id: "revive", price: 2 },
-    { id: "score_boost", price: 2 },
-    { id: "ghost_walls", price: 2 },
-    { id: "shield", price: 2 },
-    { id: "antidote", price: 2 },
-    { id: "feast", price: 3 },
-    { id: "calm", price: 2 },
-    { id: "surprise", price: 2 },
-    { id: "combo_grace", price: 2 },
-    { id: "nibble", price: 1 },
-    { id: "phase_in", price: 2 },
-    { id: "rich_bite", price: 2 },
-    { id: "early_coin", price: 1 },
-    { id: "magnet", price: 18, permanent: true },
-    { id: "lucky_coins", price: 15, permanent: true },
-    { id: "more_apples", price: 22, permanent: true },
-    { id: "trail", price: 14, permanent: true },
-    { id: "echo", price: 12, permanent: true },
-    { id: "sweet_tooth", price: 25, permanent: true },
-    { id: "berry_ward", price: 20, permanent: true },
-    { id: "golden_luck", price: 22, permanent: true },
-    { id: "sharp_eyes", price: 16, permanent: true },
-    { id: "tidy", price: 18, permanent: true },
-    { id: "steady_hands", price: 20, permanent: true },
-    { id: "warp_linger", price: 18, permanent: true },
+    { id: "slow_start", price: 6 },
+    { id: "shrink", price: 6 },
+    { id: "head_start", price: 6 },
+    { id: "dash", price: 10 },
+    { id: "revive", price: 12 },
+    { id: "score_boost", price: 10 },
+    { id: "ghost_walls", price: 12 },
+    { id: "shield", price: 10 },
+    { id: "antidote", price: 10 },
+    { id: "feast", price: 16 },
+    { id: "calm", price: 10 },
+    { id: "surprise", price: 10 },
+    { id: "combo_grace", price: 10 },
+    { id: "nibble", price: 6 },
+    { id: "phase_in", price: 10 },
+    { id: "rich_bite", price: 10 },
+    { id: "early_coin", price: 6 },
+    { id: "magnet", price: 72, permanent: true },
+    { id: "lucky_coins", price: 60, permanent: true },
+    { id: "more_apples", price: 88, permanent: true },
+    { id: "trail", price: 56, permanent: true },
+    { id: "echo", price: 48, permanent: true },
+    { id: "sweet_tooth", price: 100, permanent: true },
+    { id: "berry_ward", price: 80, permanent: true },
+    { id: "golden_luck", price: 88, permanent: true },
+    { id: "sharp_eyes", price: 64, permanent: true },
+    { id: "tidy", price: 72, permanent: true },
+    { id: "steady_hands", price: 80, permanent: true },
+    { id: "warp_linger", price: 72, permanent: true },
   ];
 
   const CONSUMABLE_KEYS = [
@@ -3328,12 +3324,7 @@
         boardSize - ctx.lineWidth,
       );
       const ahead = cellAhead(1);
-      if (
-        ahead.x >= 0 &&
-        ahead.y >= 0 &&
-        ahead.x < GRID &&
-        ahead.y < GRID
-      ) {
+      if (ahead.x >= 0 && ahead.y >= 0 && ahead.x < GRID && ahead.y < GRID) {
         ctx.fillStyle = "rgba(196, 69, 54, 0.28)";
         ctx.fillRect(ahead.x * CELL, ahead.y * CELL, CELL, CELL);
       }
@@ -3757,11 +3748,7 @@
     runHudBoosts.innerHTML = chips
       .map((c) => {
         const cls =
-          c.tone === "hot"
-            ? " is-hot"
-            : c.tone === "gold"
-              ? " is-gold"
-              : "";
+          c.tone === "hot" ? " is-hot" : c.tone === "gold" ? " is-gold" : "";
         return `<span class="run-hud-chip${cls}">${c.label}</span>`;
       })
       .join("");
@@ -3805,10 +3792,7 @@
       ahead.y >= GRID ||
       snake.some(
         (s, i) =>
-          i > 0 &&
-          i < snake.length - 1 &&
-          s.x === ahead.x &&
-          s.y === ahead.y,
+          i > 0 && i < snake.length - 1 && s.x === ahead.x && s.y === ahead.y,
       )
     );
   }
@@ -4113,7 +4097,13 @@
       saveLifetime();
     }
     if (aiAssisted) {
-      showOverlay("overlayAiRun", "overlayAiRunText", "again", { score }, "lobby");
+      showOverlay(
+        "overlayAiRun",
+        "overlayAiRunText",
+        "again",
+        { score },
+        "lobby",
+      );
     } else if (score > highScore) {
       highScore = score;
       saveSecure(HIGH_SCORE_KEY, highScore);
@@ -4124,12 +4114,24 @@
       pulseCoinValue();
       showBoardToast(t("toastNewBestCoins", { n: bonus }));
       celebrateNewBest();
-      showOverlay("overlayNewBest", "overlayNewBestText", "again", { score }, "lobby");
+      showOverlay(
+        "overlayNewBest",
+        "overlayNewBestText",
+        "again",
+        { score },
+        "lobby",
+      );
     } else {
-      showOverlay("overlayOuch", "overlayOuchText", "again", {
-        score,
-        best: highScore,
-      }, "lobby");
+      showOverlay(
+        "overlayOuch",
+        "overlayOuchText",
+        "again",
+        {
+          score,
+          best: highScore,
+        },
+        "lobby",
+      );
     }
     updateShrinkBtn();
   }
@@ -4589,14 +4591,24 @@
         run.sparkleTrail = true;
         updateRunHud();
         if (snake?.[0]) {
-          spawnTrailSpark(snake[0].x, snake[0].y, true, 40 + Math.random() * 30);
+          spawnTrailSpark(
+            snake[0].x,
+            snake[0].y,
+            true,
+            40 + Math.random() * 30,
+          );
         }
       }
       if (id === "echo" && runActive() && !aiAssisted) {
         run.echoTrail = true;
         updateRunHud();
         if (snake?.[0]) {
-          spawnTrailSpark(snake[0].x, snake[0].y, true, 210 + Math.random() * 30);
+          spawnTrailSpark(
+            snake[0].x,
+            snake[0].y,
+            true,
+            210 + Math.random() * 30,
+          );
         }
       }
       showBoardToast(t("toastPermanent", { name: shopItemName(id) }));
@@ -5250,7 +5262,6 @@
       resumeRunClock();
     }
   };
-
 
   function maybeDailyGift() {
     const key = "mumu-daily-gift";
